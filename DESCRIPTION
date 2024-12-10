@@ -12,7 +12,7 @@ LazyData: true
 Imports:
   MASS, dplyr, ggplot2, sf, rnaturalearth
 Suggests: 
- MASS, dplyr, ggplot2, sf, rnaturalearth
+    MASS, dplyr, ggplot2, sf, rnaturalearth
     knitr,
     rmarkdown
 VignetteBuilder: knitr
