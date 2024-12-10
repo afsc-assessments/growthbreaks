@@ -131,16 +131,13 @@ us <- ne_countries(scale = "medium", returnclass = "sf") %>%
 
 # Perform spatial operation to remove points in the dataframe that overlap with the US polygon
 sf_df_clipped <- sf_df[!st_within(sf_df, st_union(us), sparse = FALSE), ]
-
-
 ```
  
 ```{r, echo = FALSE}
-
 # Plot the US polygon and the points outside of it using ggplot2
 ggplot() +
   geom_sf(data = us, fill = NA, color = 'black') +
-  geom_sf(data = sf_df_clipped, aes(size = length, color =resid), alpha = 0.9) +
+  geom_sf(data = sf_df_clipped, aes( color =resid, size = length), alpha = 0.9) +
   scale_y_continuous(limits = c(50,71)) +
   scale_x_continuous(limits = c(-185,-130))+
   guides(size = 'none')+
