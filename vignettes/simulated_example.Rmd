@@ -154,7 +154,7 @@ p2 <- ggplot() +
   scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = 0) +
   labs(color = 'length residual')
 
-
-gridExtra::grid.arrange(p1, p2, ncol=2)
+p1
+p2
 ```
 
