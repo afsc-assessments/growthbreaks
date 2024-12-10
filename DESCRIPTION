@@ -10,9 +10,7 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Imports:
-  MASS, dplyr, ggplot2, sf, rnaturalearth
 Suggests: 
-    MASS, dplyr, ggplot2, sf, rnaturalearth
     knitr,
     rmarkdown
 VignetteBuilder: knitr
