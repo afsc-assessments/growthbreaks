@@ -9,9 +9,10 @@ Description: More about what it does (maybe more than one line)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-imports:
+Imports:
   MASS, dplyr, ggplot2, sf, rnaturalearth
 Suggests: 
+ MASS, dplyr, ggplot2, sf, rnaturalearth
     knitr,
     rmarkdown
 VignetteBuilder: knitr
