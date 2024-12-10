@@ -3,7 +3,8 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   getting_started: getting_started.html
-last_built: 2024-12-10T22:59Z
+  simulated_example: simulated_example.html
+last_built: 2024-12-10T23:27Z
 urls:
   reference: https://afsc-assessments.github.io/growthbreaks/reference
   article: https://afsc-assessments.github.io/growthbreaks/articles
