@@ -138,7 +138,13 @@ sf_df_clipped <- sf_df[!st_within(sf_df, st_union(us), sparse = FALSE), ]
  
 ```{r, echo = FALSE}
 # Plot the US polygon and the points outside of it using ggplot2
-ggplot() +
+p1 <- ggplot( ) +
+  geom_point(aes(x = age, y = length, color = group), size = 2)+
+  scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = 3) +
+  guides(color = 'none')+
+  theme_minimal() 
+
+p2 <- ggplot() +
   geom_sf(data = us, fill = NA, color = 'black') +
   geom_sf(data = sf_df_clipped, aes( color =resid, size = length), alpha = 0.9) +
   scale_y_continuous(limits = c(50,71)) +
@@ -147,5 +153,8 @@ ggplot() +
   theme_minimal() +
   scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = 0) +
   labs(color = 'length residual')
+
+
+gridExtra::grid.arrange(p1, p2, ncol=2)
 ```
 

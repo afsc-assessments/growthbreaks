@@ -24,7 +24,9 @@ Imports:
     magrittr (>= 2.0.0),
     sf,
     MASS,
-    rnaturalearth
+    rnaturalearth,
+    rnaturalearthdata,
+    gridExtra
 Suggests: 
     knitr,
     rmarkdown
