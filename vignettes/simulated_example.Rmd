@@ -25,6 +25,7 @@ library(rnaturalearth)
 
 # Simulated length-at-age data
 A spatial process gives rise to heterogeneity in fish length-at-age with a predominant north-south cline, as shown in the figure below:
+
 ```{r, echo = FALSE}
 ## based on code by G.D. Adams
 ## Specify data size
