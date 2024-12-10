@@ -1,11 +1,11 @@
 Package: growthbreaks
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Spatio-temporal Growth Anomaly Detection
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Maia S. Kapur
+Maintainer: Maia S. Kapur <maia.kapur@noaa.gov>
+Description: Implements the GAM-based breakpoint detection method for length-at-age observations as described
+    Kapur et. al. 2019.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
