@@ -2,8 +2,8 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  simulated_example: simulated_example.html
-last_built: 2024-12-10T21:32Z
+  getting_started: getting_started.html
+last_built: 2024-12-10T22:59Z
 urls:
   reference: https://afsc-assessments.github.io/growthbreaks/reference
   article: https://afsc-assessments.github.io/growthbreaks/articles
