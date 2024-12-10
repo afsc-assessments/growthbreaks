@@ -6,10 +6,22 @@ Author: Maia S. Kapur
 Maintainer: Maia S. Kapur <maia.kapur@noaa.gov>
 Description: Implements the GAM-based breakpoint detection method for length-at-age observations as described
     Kapur et. al. 2019.
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.6.0)
 Imports:
+    TMB (>= 1.7.20),
+    tidyr (>= 1.1.2),
+    dplyr (>= 1.0.2),
+    ggplot2 (>= 3.3.2),
+    zoo (>= 1.7),
+    sessioninfo (>= 1.1.1),
+    abind (>= 1.4-5),
+    rmarkdown (>= 2.11),
+    knitr (>= 1.37),
+    magrittr (>= 2.0.0)
 Suggests: 
     knitr,
     rmarkdown
