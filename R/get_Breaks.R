@@ -11,6 +11,8 @@
 
 get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
 
+  if(is.null(ages_to_use)) ages_to_use = unique(dat$ages)
+
   if(axes == 0){
     Terms <- c('lat','long')
   } else if(axes == 1){
@@ -136,25 +138,13 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
       # breakpoints$age[idx] <- ages_to_use[iage];
 
     } ## end terms
-    # } ## end sexes
+     ## TODO end sexes
 
   } ## end key ages
 
-  newD[!is.na(newD$detected_break),]
-
-  ## reformat breaks DF for interpredation
-  breaks_df <- data.frame(Age = rep(c(4,6,30),2), Sex = c(rep("F",3),rep("M",3)),
-                          Year = NA, Lat = NA, Lon = NA)
-  vec <- c(seq(1,length(breaksdf),3))
-  for(i in 1:length(vec)){
-    breaks_df$Year[i] <- breaksdf[[vec[i]]]
-    breaks_df$Lat[i] <- breaksdf[[vec[i]+1]]
-    breaks_df$Lon[i] <- breaksdf[[vec[i]+2]]
-  }
-
+  breakpoints <- newD[!is.na(newD$detected_break),]
+  return(breakpoints)
 
 }
 
-
-
-}
+get_Breaks(dat = simulated_data, axes = 0)
