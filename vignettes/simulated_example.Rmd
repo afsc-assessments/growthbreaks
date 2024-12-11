@@ -33,17 +33,17 @@ A spatial process gives rise to heterogeneity in fish length-at-age with a predo
 ## Specify data size
 set.seed(731)
 G= 50 ## number of years
-nsamples = 10000
+nsamples = 5000
 group <- sample(1:G, nsamples, replace = TRUE) # Group for individual X
 N <- nsamples # Total number of samples
 
 
 ## Mu VBGM hyperparameters 
-mu.Linf = 500
+mu.Linf = 50
 mu.k = 0.3 
 mut.t0 = -0.5
 mu.parms <- c(mu.Linf, mu.k, mut.t0)
-sigma = 10 # Observation error
+sigma = 0.1*mu.Linf # Observation error
 
 
 ## Group level random effects
@@ -91,9 +91,9 @@ for(j in 1:N) {
 
 
 # Assign data to data frame and fill spatial info
-dat = data.frame(age = age, length = length, year = as.numeric(group))
+dat <- data.frame(age = age, length = length, year = as.numeric(group))
 dat <- dat[which(dat$length > 0),] # Make sure all lengths are positive
-dat <- dat %>% arrange(group, age, length)
+dat <- dat %>% arrange(year, age, length)
 
 dat$long <- runif(nrow(dat),-180, -135)
 

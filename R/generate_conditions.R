@@ -1,7 +1,11 @@
 
 # Function to generate all combinations of conditions based on columns in df2
 generate_conditions <- function(df1, row) {
-  columns <- colnames(row)[colnames(row) %in% c('year','lat','long')]
+
+  columns_to_check <- c('year','lat','long')
+  columns <- colnames(row)[colnames(row) %in% columns_to_check]
+  # columns <- columns[!is.na(row[,columns])]
+  # Function to generate all combinations of conditions based on columns in df2
 
   # Create a list of conditions for each column
   conditions <- map(columns, function(col) {
@@ -28,11 +32,13 @@ generate_conditions <- function(df1, row) {
     }
     df1_filtered
   })
-  # Create names for the split list
+
+  # Create names for the split list with actual values
   names(split_list) <- apply(combinations, 1, function(x) {
     paste0(columns, "_", x, "_", round(row[columns]), collapse = "_")
   })
 
-  # names(split_list) <- apply(combinations, 1, paste, collapse = "_")
   return(split_list)
+
+
 }

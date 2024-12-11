@@ -4,7 +4,7 @@
 \alias{get_Breaks}
 \title{Wrapper function to to fit gams & evaluate first derivatives}
 \usage{
-get_Breaks(dat, ages_to_use = NULL, sex = FALSE, axes = 2, showPlot = TRUE)
+get_Breaks(dat, ages_to_use = c(5, 10), sex = FALSE, axes = 0, showPlot = TRUE)
 }
 \arguments{
 \item{dat}{data.frame with columns year, age, length, lat, long, sex (optional)}
@@ -13,7 +13,7 @@ get_Breaks(dat, ages_to_use = NULL, sex = FALSE, axes = 2, showPlot = TRUE)
 
 \item{sex}{logical.}
 
-\item{axes}{do you want to evaluate axes for space only (0), time only (1), or both simultaneously (2, default)?}
+\item{axes}{do you want to evaluate axes for space only (0, default), time only (1), or both simultaneously (2)?}
 
 \item{showPlot}{logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.}
 }

@@ -2,24 +2,20 @@
 % Please edit documentation in R/refit_Growth.R
 \name{refit_Growth}
 \alias{refit_Growth}
-\title{Function to re-fit growth data at  putative breaks and return estimates for validation}
+\title{Function to re-fit growth data at putative breaks and return estimates for validation}
 \usage{
-refit_Growth()
+refit_Growth(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE)
 }
 \arguments{
-\item{x}{vector of values over which derivatives were evaluated}
+\item{dat}{data.frame with columns year, age, length, lat, long, sex (optional)}
 
-\item{d}{vector output of {Deriv()}}
+\item{breakpoints}{data.frame with columns year and/or lat and long. can be output of {get_Breaks}.}
 
-\item{upper}{upper confidence interval; output of {confint_Deriv()}}
-
-\item{lower}{lower confidence interval; output of {confint_Deriv()}}
-
-\item{eval}{the value that you would like to examine. default 0}
+\item{showPlot}{logical. do you want to see plots of the fitted curves?}
 }
 \value{
 Von B growth parameters at input breakpoints; plots with uncertainty of growth curves
 }
 \description{
-Function to re-fit growth data at  putative breaks and return estimates for validation
+Function to re-fit growth data at putative breaks and return estimates for validation
 }

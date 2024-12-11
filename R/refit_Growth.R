@@ -10,8 +10,8 @@
 refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE){
 
   # if(mean(dat) > 1000) dat$length/1000; cat('divided input lengths by 1000 \n')
-  compile("TMB/sptlVB_Sel_Sigma.cpp")
-  dyn.load(dynlib("TMB/sptlVB_Sel_Sigma"))
+  TMB::compile("TMB/sptlVB_Sel_Sigma.cpp")
+  dyn.load(TMB::dynlib("TMB/sptlVB_Sel_Sigma"))
 
   # Apply the function to each row of df2
   split_tables <- map(1:nrow(breakpoints), function(i) {
@@ -71,15 +71,69 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
   best <- model$env$last.par.best
   rep <- sdreport(model)
 
-  rep0 <-  bind_cols(
-                      data.frame(names(rep$value)),
-                      data.frame(rep$value),
-                      data.frame(rep$sd),
-                      data.frame(c(rep(strata_names, 6)))) %>%
-    mutate(lower = rep.value - 1.96*rep.sd^2,
-           upper = rep.value + 1.96*rep.sd^2)
+  ## data frame with observed and predicted values
+  fits_df <-  bind_cols(ypred =  rep$value[names(rep$value)=='ypreds'],
+                     ypred_sd = rep$sd[names(rep$value)=='ypreds'],
+                     combined_df) %>%
+    mutate(lower = ypred - 1.96*ypred_sd^2,
+           upper = ypred + 1.96*ypred_sd^2)
 
-  fits_df <- cbind(combined_df,'pred' = model$report()$ypreds) %>% distinct(pred)
+  ## data frame with parameter estimates
+  rep0 <-  bind_cols(variable =  names(rep$value)[names(rep$value)!='ypreds'],
+                     value =  rep$value[names(rep$value)!='ypreds'],
+                     value_sd =  rep$sd[names(rep$value)!='ypreds'],
+                     strata = rep(strata_names, 6)) %>%
+    mutate(lower = value - 1.96*value_sd^2,
+           upper = value + 1.96*value_sd^2)
+  rep0 <- rep0 %>% select(strata, variable, value, value_sd, lower, upper)
+
+  ## check overlap across strata
+  # Initialize the matchcol column with FALSE
+  rep0$matchcol <- FALSE
+
+  # Loop through each row of the dataframe
+  for (i in 1:nrow(rep0)) {
+    # Get the current row
+    current_row <- rep0[i, ]
+
+    # Get the rows with the same variable but different strata
+    other_rows <- rep0[rep0$variable == current_row$variable & rep0$strata != current_row$strata, ]
+
+    # Check if the value is within the lower and upper bounds of any other row
+    if (any(current_row$value >= other_rows$lower & current_row$value <= other_rows$upper)) {
+      rep0$matchcol[i] <- TRUE
+    }
+  }
+
+
+
+  if(showPlot){
+    ## panel plot of par ests and CIs
+    p1 <- ggplot(rep0, aes(x = strata, y = value, color = matchcol)) +
+      geom_point()+
+      geom_errorbar(width = 0, aes(ymin = lower, ymax = upper)) +
+      scale_color_manual(values = c('red','black'))+
+      theme_minimal()+
+      theme(legend.position = 'none',
+            axis.text.x = element_text(angle = 90))+
+      labs(x = 'strata', y = '') +
+      facet_wrap(variable~., scales = 'free_y')
+
+  ## panel plot of obs and fits
+  ## TODO include sigma around estimates
+  p2 <- ggplot(fits_df, aes(x = age, y = length, color = DES)) +
+    geom_point()+
+    geom_line(aes(y = ypred), color = 'black')+
+    # geom_ribbon(aes(ymin = lower, ymax = upper))+
+    theme_minimal()+
+    labs(x = 'strata', y = '') +theme(legend.position = 'none') +
+    facet_wrap(~DES)
+
+
+  }
+
+  ## save stuff
+  unlist(lapply(split_tables,nrow))
 
 
 

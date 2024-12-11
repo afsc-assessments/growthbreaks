@@ -22,6 +22,8 @@ Imports:
     rmarkdown (>= 2.11),
     knitr (>= 1.37),
     magrittr (>= 2.0.0),
+    mgcv,
+    purrr,
     sf,
     MASS,
     rnaturalearth,
