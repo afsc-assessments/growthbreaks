@@ -88,4 +88,4 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 }
 
 
-check_data(dat)
+# check_data(dat)
