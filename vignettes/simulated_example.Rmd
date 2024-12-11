@@ -134,6 +134,16 @@ us <- ne_countries(scale = "medium", returnclass = "sf") %>%
 
 # Perform spatial operation to remove points in the dataframe that overlap with the US polygon
 sf_df_clipped <- sf_df[!st_within(sf_df, st_union(us), sparse = FALSE), ]
+
+## a few add'l steps to save this into data/ 
+simulated_data <- sf_df_clipped %>% 
+  tidyr::extract(geometry, c('long', 'lat'), '\\((.*), (.*)\\)', convert = TRUE)  %>%
+  mutate(year = as.numeric(group)) %>%
+  select(year, age, length, lat, long)
+
+usethis::use_data(simulated_data,overwrite = TRUE)
+
+# dat<- simulated_data
 ```
  
 ```{r, echo = FALSE}
