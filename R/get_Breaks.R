@@ -144,8 +144,9 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
   } ## end key ages
 
   breakpoints <- newD[!is.na(newD$detected_break),]
+  breakpoints$count <- paste0(breakpoints$count/sum(ages_to_use),"%") ## TODO account for sex here
   return(breakpoints)
 
 }
 
-get_Breaks(dat = simulated_data, axes = 0)
+get_Breaks(dat = simulated_data,  axes = 0)
