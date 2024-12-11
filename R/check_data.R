@@ -56,7 +56,7 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
     p2 <- ggplot() +
       geom_sf(data = us, fill = NA, color = 'black') +
-      geom_point(data = dat, aes(x = long, y= lat, size= length, color = length))+
+      geom_point(data = dat_plot, aes(x = long, y= lat, size= length, color = length))+
       # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
       # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
       scale_y_continuous(limits = c(50,71)) +
@@ -69,8 +69,23 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
 
     ## plot residual map
+    p3 <- ggplot() +
+      geom_sf(data = us, fill = NA, color = 'black') +
+      geom_point(data = dat_plot, aes(x = long, y= lat, size= resid, color = resid))+
+      # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
+      # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
+      scale_y_continuous(limits = c(50,71)) +
+      scale_x_continuous(limits = c(-185,-130))+
+      guides(size = 'none')+
+      theme_minimal() +
+      scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat_plot$resid)) +
+      labs(color = '', x= '', y = '', title = 'Length Residuals') +
+      theme(legend.position = 'top')
 
+    return(list(p1,p2,p3))
 
   }
-  ## throw plots if true
 }
+
+
+check_data(dat)
