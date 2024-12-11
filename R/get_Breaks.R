@@ -55,13 +55,6 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
     if(axes == 1)  mod <- gam(length ~ s(year, bs = "cc"), data = dat_use)
     if(axes == 2)  mod <- gam(length ~ s(year, bs = "cc") + s(lat) + s(long),data = dat_use)
 
-    # layout(matrix(1:4, ncol = 2))
-    # gam.check(mod)
-    # dat_use %>% mutate(predlen = predict(mod)) %>%
-    #   select(-lat, -long) %>%
-    #   melt(id = c('year', 'age')) %>%
-    #   ggplot(data =., aes(x = age, y = value, color = variable)) +geom_point()
-
     ## get & eval derivatives ----
 
     pTerm <- predict(mod, newdata = dat_use, type = "terms", se.fit = TRUE) ## predict on original data
@@ -74,41 +67,6 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
              variance_total = rowSums(pTerm$se.fit),
              lower = predLen - (crit.t * (variance_total)),
              upper = predLen + (crit.t * (variance_total)))
-
-    # if(axes %in% c(0,2)){
-    #
-    #   p2$se2_lat <- pTerm$se.fit[,1]
-    #   p2$se2_long <- pTerm$se.fit[,2]
-    # } else if(axes %in% c(1,2)){
-    #   p2$se2_yr <- pTerm$se.fit[,1]
-    # }
-    # p2 %>%
-    #   mutate(se2_lat = ifelse(axes %in% c(0,1)), , NA)
-    #
-    # # pdat <- transform(dat_use,
-    # #                   predLen = p2,
-    # #                   se2_lat = pTerm$se.fit[,2],
-    # #                   se2_lon = pTerm$se.fit[,3],
-    # #                   se2_yr = pTerm$se.fit[,1])
-
-
-    ## calculate additive variances
-    # if(axes == 0){
-    #   pdat <- transform(pdat,
-    #                     upper = predLen + (crit.t * (se2_lat+se2_lon)),
-    #                     lower = predLen - (crit.t * (se2_lat+se2_lon)))
-    # }else if (axes == 1){
-    #   pdat <- transform(pdat,
-    #                     upper = predLen + (crit.t * (se2_yr)),
-    #                     lower = predLen - (crit.t * (se2_yr)))
-    # }else if(axes == 2){
-    #   pdat <- transform(pdat,
-    #                     upper = predLen + (crit.t * (se2_lat+se2_lon+se2_yr)),
-    #                     lower = predLen - (crit.t * (se2_lat+se2_lon+se2_yr)))
-    # }
-
-    ## predict over parameter space
-    # breaksdf <- list(); idx = 1## storage for breakpoints
 
     for(t in 1:length(Terms)){
       Term <- Terms[t]
@@ -132,18 +90,6 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
       newD$detected_break[newD[,Term] %in% vals] <- TRUE ## flag the rows of detected breaks
       newD$detected_break[nrow(newD)] <- NA ## overwrite edge cases
       newD$count[newD[,Term] %in% vals] <- newD$count[newD[,Term] %in% vals]+1 ## add how many combos flagged
-      # breaksdf[[idx]] <- sort(c(unique(vals))) ## get rounded unique
-
-      ## fill NAs in bdf for binding
-      # for(i in 1:length(breaksdf)){
-      #   if (length(breaksdf[[i]]) == 0){ ## fill NA for empty
-      #     breaksdf[[i]] <- NA
-      #   }
-      # }## end breaksdf
-      # cat(breaksdf)
-
-
-      # breakpoints$age[idx] <- ages_to_use[iage];
 
     } ## end terms
      ## TODO end sexes
@@ -151,7 +97,6 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
   } ## end key ages
 
   breakpoints <- newD[!is.na(newD$detected_break),]
-  # breakpoints$count <- paste0(100*breakpoints$count/length(ages_to_use),"%") ## TODO account for sex here
   breakpoints$count <-  breakpoints$count/length(ages_to_use)
 
   if(showPlot){
