@@ -32,9 +32,9 @@ A spatial process gives rise to heterogeneity in fish length-at-age with a predo
 ## based on code by G.D. Adams
 ## Specify data size
 set.seed(731)
-G=6
-nsamples = 500
-group <- sample(1:6, nsamples, replace = TRUE) # Group for individual X
+G= 50 ## number of years
+nsamples = 10000
+group <- sample(1:G, nsamples, replace = TRUE) # Group for individual X
 N <- nsamples # Total number of samples
 
 
@@ -91,7 +91,7 @@ for(j in 1:N) {
 
 
 # Assign data to data frame and fill spatial info
-dat = data.frame(age = age, length = length, group = as.factor(group))
+dat = data.frame(age = age, length = length, year = as.numeric(group))
 dat <- dat[which(dat$length > 0),] # Make sure all lengths are positive
 dat <- dat %>% arrange(group, age, length)
 
@@ -101,26 +101,23 @@ sample_value <- function(group) {
   weights <- seq(50, 68, length.out = 50)
   sample(seq(50, 68, length.out = 50), 1, prob = weights^(2*group))
 } 
-dat$lat <- sapply(as.numeric(dat$group), sample_value) 
+dat$lat <- sapply(as.numeric(dat$year), sample_value) 
 # Plot the data
 cols <- c("#86BBD8","#2F4858", "#F6AE2D", "#F26419", "#E86A92", "#57A773") 
 p1 <- ggplot(dat, aes(x = age, y = length, colour = group)) +
   geom_point(size = 2) + 
-  scale_colour_manual(values=cols) +
+  # scale_colour_manual(values=cols) +
   theme_minimal()+
   theme(legend.position = 'none')+
   labs(title = 'length at age observations')
 
 p2 <- ggplot(dat, aes(x = long, y = lat, colour = group, size= length)) +
   geom_point(alpha = 0.5) + 
-  scale_colour_manual(values=cols) +
+  # scale_colour_manual(values=cols) +
   theme_minimal()+
-  labs(title = 'spatial length-at-age')
-
-# dat <- dat %>%select(year = group, age, length, latitude = lat, longitude = long)
+  labs(title = 'spatial length-at-age') 
 
 # Create a dataframe with latitude and longitude columns
-
 df <- dat %>%
       mutate(meanl = mean(length), .by = c('age')) %>%
       mutate(resid = length-meanl) 
@@ -137,8 +134,7 @@ sf_df_clipped <- sf_df[!st_within(sf_df, st_union(us), sparse = FALSE), ]
 
 ## a few add'l steps to save this into data/ 
 simulated_data <- sf_df_clipped %>% 
-  tidyr::extract(geometry, c('long', 'lat'), '\\((.*), (.*)\\)', convert = TRUE)  %>%
-  mutate(year = as.numeric(group)) %>%
+  tidyr::extract(geometry, c('long', 'lat'), '\\((.*), (.*)\\)', convert = TRUE)  %>% 
   select(year, age, length, lat, long)
 
 usethis::use_data(simulated_data,overwrite = TRUE)
