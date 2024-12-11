@@ -122,4 +122,4 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
 
 }
 
-# get_Breaks(dat = simulated_data, axes = 0, ages_to_use = 15:20, showPlot = TRUE)
+# breakpoints <- get_Breaks(dat = simulated_data, axes = 0, ages_to_use = 15:20, showPlot = TRUE)
