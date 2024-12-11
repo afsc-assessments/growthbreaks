@@ -2,7 +2,7 @@
 #' @param dat data.frame with columns year, age, length, lat, long, sex (optional)
 #' @param ages_to_use optional. vector of age(s) to evaluate for breakpoints.
 #' @param sex logical.
-#' @param axes do you want to evaluate axes for space only (0), time only (1), or both simultaneously (2, default)?
+#' @param axes do you want to evaluate axes for space only (0, default), time only (1), or both simultaneously (2)?
 #' @param showPlot logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.
 
 #' @return matrix of detected breakpoints and plots
@@ -11,7 +11,10 @@
 #' @export
 
 
-get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = TRUE){
+get_Breaks <- function(dat, ages_to_use=c(5,10),
+                       sex = FALSE,
+                       axes = 0,
+                       showPlot = TRUE){
 
   if(is.null(ages_to_use)) ages_to_use = unique(dat$ages)
 
@@ -35,9 +38,9 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
     ## TODO sort how to index when split by sex
   }
 
-  newD <- data.frame( year = seq(min(dat_use$year),max(dat_use$year),length = 100),
-                      long = seq(min(dat_use$long),max(dat_use$long), length = 100),
-                      lat = seq(min(dat_use$lat),max(dat_use$lat),length = 100))[Terms] %>%
+  newD <- data.frame( year = seq(min(dat$year),max(dat$year),length = 100),
+                      long = seq(min(dat$long),max(dat$long), length = 100),
+                      lat = seq(min(dat$lat),max(dat$lat),length = 100))[Terms] %>%
     mutate(detected_break = NA, count = 0)
 
   for(iage in seq_along(ages_to_use)){ ## loop over key ages
@@ -68,7 +71,7 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
       Term <- Terms[t]
 
       m2.d <- Deriv(mod, newdata = newD)
-      m2.dci <- confint(m2.d, term = Term)
+      m2.dci <-  confint_Deriv(m2.d, term = Term)
 
       crit.eval = quantile(probs = c(0.025, 0.975), x =  m2.d[[Term]]$deriv) ## use tails
       crit.eval.se = quantile(probs = c(0.025, 0.975), x =  m2.d[[Term]]$se.deriv) ## use tails
@@ -110,7 +113,7 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = T
     scale_x_continuous(limits = c(-185,-130))+
     guides(size = 'none', alpha = 'none')+
     theme_minimal() +
-    scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat_plot$length)) +
+    scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
     labs(color = '', x= '', y = '', title = 'Length Observations & Detected Break(s)' ) +
     theme(legend.position = 'top')
   print(p1)
