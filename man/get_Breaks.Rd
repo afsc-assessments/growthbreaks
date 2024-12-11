@@ -4,22 +4,26 @@
 \alias{get_Breaks}
 \title{Wrapper function to to fit gams & evaluate first derivatives}
 \usage{
-get_Breaks(dat, axes = "both")
+get_Breaks(dat, ages_to_use = NULL, sex = FALSE, axes = 2, showPlot = TRUE)
 }
 \arguments{
-\item{x}{vector of values over which derivatives were evaluated}
+\item{dat}{data.frame with columns year, age, length, lat, long, sex (optional)}
 
-\item{d}{vector output of {Deriv()}}
+\item{ages_to_use}{optional. vector of age(s) to evaluate for breakpoints.}
 
-\item{upper}{upper confidence interval; output of {confint_Deriv()}}
+\item{sex}{logical.}
 
-\item{lower}{lower confidence interval; output of {confint_Deriv()}}
+\item{axes}{do you want to evaluate axes for space only (0), time only (1), or both simultaneously (2, default)?}
 
-\item{eval}{the value that you would like to examine. default 0}
+\item{showPlot}{logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.}
 }
 \value{
 matrix of detected breakpoints and plots
 }
 \description{
 Wrapper function to to fit gams & evaluate first derivatives
+}
+\examples{
+ \dontrun{ data(simulated_data) ;get_Breaks(dat = simulated_data, ages_to_use = c(15:20), axes = 0)
+}
 }
