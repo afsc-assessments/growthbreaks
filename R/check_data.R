@@ -56,15 +56,16 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
     p2 <- ggplot() +
       geom_sf(data = us, fill = NA, color = 'black') +
-      geom_sf(data = sf_df_clipped, aes( color =resid, size = length), alpha = 0.9) +
+      geom_point(data = dat, aes(x = long, y= lat, size= length, color = length))+
       # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
       # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
       scale_y_continuous(limits = c(50,71)) +
       scale_x_continuous(limits = c(-185,-130))+
       guides(size = 'none')+
       theme_minimal() +
-      scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = 0) +
-      labs(color = 'length residual')
+      scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
+      labs(color = '', x= '', y = '', title = 'Raw Length Observations') +
+      theme(legend.position = 'top')
 
 
     ## plot residual map
