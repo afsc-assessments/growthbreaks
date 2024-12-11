@@ -1,5 +1,13 @@
+#' Calculate confidence interval of derivative, adapted from
+#' \href{https://gist.githubusercontent.com/gavinsimpson/e73f011fdaaab4bb5a30/raw/82118ee30c9ef1254795d2ec6d356a664cc138ab/Deriv.R}{Gavin Simpson}.
+#' @param object vector output of {Deriv()}
+#' @param term string smooth name, i.e. "year". must match values in mod and newdata
+#' @param alpha confidence threshold. default 0.05 (for 95% CI)
 
-confint.Deriv <- function(object, term, alpha = 0.05, ...) {
+#' @return vector of confidence intervals of same length as object.
+#' @export
+
+confint_Deriv <- function(object, term, alpha = 0.05, ...) {
   l <- length(object) - 3
   term.labs <- names(object[seq_len(l)])
   if(missing(term)) {
