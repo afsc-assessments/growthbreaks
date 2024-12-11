@@ -1,0 +1,14 @@
+#' Function to re-fit growth data at  putative breaks and return estimates for validation
+#' @param x vector of values over which derivatives were evaluated
+#' @param d vector output of {Deriv()}
+#' @param upper upper confidence interval; output of {confint_Deriv()}
+#' @param lower lower confidence interval; output of {confint_Deriv()}
+#' @param eval the value that you would like to examine. default 0
+
+#' @return Von B growth parameters at input breakpoints; plots with uncertainty of growth curves
+#' @export
+#'
+#'
+refit_Growth<-function(){
+
+}
