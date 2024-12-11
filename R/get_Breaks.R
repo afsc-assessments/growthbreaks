@@ -3,13 +3,19 @@
 #' @param ages_to_use optional. vector of age(s) to evaluate for breakpoints.
 #' @param sex logical.
 #' @param axes do you want to evaluate axes for space only (0), time only (1), or both simultaneously (2, default)?
-#' @param eval the value that you would like to examine. default 0
+#' @param showPlot logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.
 
 #' @return matrix of detected breakpoints and plots
+#' @example
+#'  \dontrun{
+#' data(simulated_data) ## load example dataset
+#' get_Breaks(dat = simulated_data, ages_to_use = c(15:20), axes = 0)
+#' }
+#'
 #' @export
 
 
-get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
+get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2,showPlot = TRUE){
 
   if(is.null(ages_to_use)) ages_to_use = unique(dat$ages)
 
@@ -124,6 +130,7 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
       # pix <- !is.na(m2.dsig.zeros)
       vals <- m2.d$eval[[Term]][!is.na(m2.dsig.zeros)]
       newD$detected_break[newD[,Term] %in% vals] <- TRUE ## flag the rows of detected breaks
+      newD$detected_break[nrow(newD)] <- NA ## overwrite edge cases
       newD$count[newD[,Term] %in% vals] <- newD$count[newD[,Term] %in% vals]+1 ## add how many combos flagged
       # breaksdf[[idx]] <- sort(c(unique(vals))) ## get rounded unique
 
@@ -144,9 +151,31 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
   } ## end key ages
 
   breakpoints <- newD[!is.na(newD$detected_break),]
-  breakpoints$count <- paste0(breakpoints$count/sum(ages_to_use),"%") ## TODO account for sex here
+  # breakpoints$count <- paste0(100*breakpoints$count/length(ages_to_use),"%") ## TODO account for sex here
+  breakpoints$count <-  breakpoints$count/length(ages_to_use)
+
+  if(showPlot){
+    data(us)
+  p1 <- ggplot() +
+    geom_hline(data = breakpoints, aes(yintercept = lat), lty = 'dashed')+
+    geom_vline(data = breakpoints, aes(xintercept = long), lty = 'dashed')+
+    # geom_hline(data = breakpoints, aes(yintercept = lat, alpha = count), lty = 'dashed')+
+    # geom_vline(data = breakpoints, aes(xintercept = long, alpha = count), lty = 'dashed')+
+    geom_sf(data = us, fill = NA, color = 'black') +
+    geom_point(data = dat, aes(x = long, y= lat, size= length, color = length))+
+    # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
+    # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
+    scale_y_continuous(limits = c(50,71)) +
+    scale_x_continuous(limits = c(-185,-130))+
+    guides(size = 'none', alpha = 'none')+
+    theme_minimal() +
+    scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat_plot$length)) +
+    labs(color = '', x= '', y = '', title = 'Length Observations & Detected Break(s)' ) +
+    theme(legend.position = 'top')
+  print(p1)
+  }
   return(breakpoints)
 
 }
 
-get_Breaks(dat = simulated_data,  axes = 0)
+# get_Breaks(dat = simulated_data, axes = 0, ages_to_use = 15:20, showPlot = TRUE)
