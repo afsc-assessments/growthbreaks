@@ -1,17 +1,17 @@
 #' Function to re-fit growth data at putative breaks and return estimates for validation
 #' @param dat data.frame with columns year, age, length, lat, long, sex (optional)
 #' @param breakpoints data.frame with columns year and/or lat and long. can be output of {get_Breaks}.
-#' @param break_by optional. specify a certain term (column) of breakpoints for re-fitting curves; otherwise it will use all columns.
 #' @param showPlot logical. do you want to see plots of the fitted curves?
 
 #' @return Von B growth parameters at input breakpoints; plots with uncertainty of growth curves
 #' @export
 #'
 #'
-refit_Growth <- function(dat = simulated_data, breakpoints, showPlot = TRUE){
+refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE){
 
   # if(mean(dat) > 1000) dat$length/1000; cat('divided input lengths by 1000 \n')
-
+  compile("TMB/sptlVB_Sel_Sigma.cpp")
+  dyn.load(dynlib("TMB/sptlVB_Sel_Sigma"))
 
   # Apply the function to each row of df2
   split_tables <- map(1:nrow(breakpoints), function(i) {
@@ -21,27 +21,66 @@ refit_Growth <- function(dat = simulated_data, breakpoints, showPlot = TRUE){
   # Flatten the list of lists
   split_tables <- flatten(split_tables)
 
-  ## estimate the VB pars
-  par_est <- optim(par = c(2000,0.3,1,30),
-                   method="L-BFGS-B",
-        fn = vonB_optim,
-        lower = c(1,0,0,0),
-        # upper = c(max(dat$length)*2,Inf, max(dat$age),Inf),
-        age = split_tables[[1]]$age,
-        obs = split_tables[[1]]$length)
+  # Combine all elements of split_tables into a single data frame
+  combined_df <- bind_rows(
+    map2(split_tables, names(split_tables), ~mutate(.x, DES = .y))
+  )
 
-  output <- NULL
-  output$group <- names(split_tables)[[1]]
-  output$linf <-  par_est$par[1]
-  output$k <-  par_est$par[2]
-  output$t0 <-  par_est$par[3]
-  output$sigma <-  par_est$par[4]
+  combined_df$Sel <- 1 ## TODO include the penalty later for optional length selex
+  combined_df$selType <- 1 ## TODO include the penalty later for optional length selex;
 
-  growth_est <- vonB(linf = par_est$par[1],k=par_est$par[2],t0=par_est$par[3],
-                     age = unique(dat$age))
+  nStrata <- length(split_tables)
+  strata_names <- names(split_tables)
+  strata_factor <- as.numeric(as.factor(combined_df$DES))-1
 
-  ## estimate parameters with CIs using optim/nls
-  ## plot the resultant obs & estimates
+  ## this will assign a unique DES depending on period X sex X region -- whatever is in DES
+  data <-
+    list(
+      Length_cm = combined_df[,"length"],
+      Age = combined_df[,"age"],
+      DES = as.vector(strata_factor), ## keep this for master iterations
+      selType = combined_df[,'selType'],
+      Sel = combined_df[,'Sel'],
+      nStrata = nStrata,
+      a2 = 30
+    )
+
+  parameters <-
+    list(
+      log_Linf = rep(log(summary(combined_df$length)[5]), nStrata),
+      log_k = rep(log(0.5), nStrata),
+      t0 = rep(0.1, nStrata),
+      log_Sigma = rep(log(2), nStrata)
+    )
+
+  # Now estimate everything
+  map <- NULL
+  model <- MakeADFun(data, parameters,  DLL="sptlVB_Sel_Sigma",silent=T,map=map)
+  fit <- nlminb(
+    model$par,
+    model$fn,
+    model$gr,
+    control = list(
+      rel.tol = 1e-12,
+      eval.max = 100000,
+      iter.max = 10000
+    )
+  )
+  # for (k in 1:3)  fit <- nlminb(model$env$last.par.best, model$fn, model$gr) ## start at last-best call, for stability
+  model$report()$denominator ## if we only ran seltype 2 points, this should NOT be 1.0
+  best <- model$env$last.par.best
+  rep <- sdreport(model)
+
+  rep0 <-  bind_cols(
+                      data.frame(names(rep$value)),
+                      data.frame(rep$value),
+                      data.frame(rep$sd),
+                      data.frame(c(rep(strata_names, 6)))) %>%
+    mutate(lower = rep.value - 1.96*rep.sd^2,
+           upper = rep.value + 1.96*rep.sd^2)
+
+  fits_df <- cbind(combined_df,'pred' = model$report()$ypreds) %>% distinct(pred)
+
 
 
 
