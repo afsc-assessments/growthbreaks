@@ -19,8 +19,3 @@ plots
 \description{
 load, check and plot input data for use in breakpoint detection
 }
-\examples{
-\dontrun{
-read_rep(fn = 'inst/example_data/goasr.rep')
-}
-}

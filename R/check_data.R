@@ -56,7 +56,7 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
       # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
       scale_y_continuous(limits = c(50,71)) +
       scale_x_continuous(limits = c(-185,-130))+
-      guides(size = 'none')+
+      guides(size = 'none', color = 'none')+
       theme_minimal() +
       scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
       labs(color = '', x= '', y = '', title = 'Raw Length Observations') +
