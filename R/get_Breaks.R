@@ -36,7 +36,7 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
   newD <- data.frame( year = seq(min(dat_use$year),max(dat_use$year),length = 100),
                       long = seq(min(dat_use$long),max(dat_use$long), length = 100),
                       lat = seq(min(dat_use$lat),max(dat_use$lat),length = 100))[Terms] %>%
-    mutate(detected_break = NA)
+    mutate(detected_break = NA, count = 0)
 
   for(iage in seq_along(ages_to_use)){ ## loop over key ages
 
@@ -124,6 +124,7 @@ get_Breaks <- function(dat, ages_to_use=NULL, sex = FALSE, axes = 2){
       # pix <- !is.na(m2.dsig.zeros)
       vals <- m2.d$eval[[Term]][!is.na(m2.dsig.zeros)]
       newD$detected_break[newD[,Term] %in% vals] <- TRUE ## flag the rows of detected breaks
+      newD$count[newD[,Term] %in% vals] <- newD$count[newD[,Term] %in% vals]+1 ## add how many combos flagged
       # breaksdf[[idx]] <- sort(c(unique(vals))) ## get rounded unique
 
       ## fill NAs in bdf for binding
