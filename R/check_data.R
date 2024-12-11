@@ -4,11 +4,6 @@
 #' @param showPlot logical. do you want to visualize your input data?
 #' @return plots
 #' @export
-#'
-#' @examples
-#' \dontrun{
-#' read_rep(fn = 'inst/example_data/goasr.rep')
-#' }
 check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
   ## header checks
