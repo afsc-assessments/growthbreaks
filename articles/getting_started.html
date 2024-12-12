@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>getting_started • growthbreaks</title>
+<title>Getting Started • growthbreaks</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="getting_started">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -33,8 +33,7 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/getting_started.html">getting_started</a></li>
-    <li><a class="dropdown-item" href="../articles/simulated_example.html">Simulated Data Example</a></li>
+<li><a class="dropdown-item" href="../articles/getting_started.html">Getting Started</a></li>
   </ul>
 </li>
       </ul>
@@ -55,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>getting_started</h1>
+      <h1>Getting Started</h1>
             
       
 
@@ -64,8 +63,25 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://afsc-assessments.github.io/growthbreaks/">growthbreaks</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="loading-viewing-your-data">Loading &amp; viewing your data<a class="anchor" aria-label="anchor" href="#loading-viewing-your-data"></a>
+</h2>
+<p>The example shown here will include a spatial process giving rise to
+heterogeneity in fish length-at-age with a predominant north-south
+cline.</p>
+<p>The first step is to ensure your data are formatted correctly and to
+be aware of any sample size issues. This is accomplished via
+<code><a href="../reference/check_data.html">check_data()</a></code>, which returns plots of the observations and
+residuals.</p>
+<pre><code><span><span class="co">#&gt; [[1]]</span></span></code></pre>
+<p><img src="getting_started_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[2]]</span></span></code></pre>
+<p><img src="getting_started_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
+<pre><code><span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; [[3]]</span></span></code></pre>
+<p><img src="getting_started_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
+</div>
   </main>
 </div>
 
