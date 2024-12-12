@@ -40,50 +40,52 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
     mutate(meanL = mean(length), .by = ifelse(sex, c('sex','age'), 'age')) %>%
     mutate(resid = length-meanL)
 
+
+
+
+  ## plot raw length-age obs
+
+  p1 <- ggplot(dat_plot, aes(x = age, y = length, color = factor(year))) +
+    geom_point() +
+    theme_minimal()+ theme(legend.position = 'none')+
+    labs(x = 'Age', y = 'Length', color = 'year', title = 'Raw length-at-age observations')
+
+  ## plot raw length-age map
+  data(us)
+
+  p2 <- ggplot() +
+    geom_sf(data = us, fill = NA, color = 'black') +
+    geom_point(data = dat_plot, aes(x = long, y= lat, size= length, color = length))+
+    # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
+    # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
+    scale_y_continuous(limits = c(50,71)) +
+    scale_x_continuous(limits = c(-185,-130))+
+    guides(size = 'none')+
+    theme_minimal() +
+    scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
+    labs(color = '', x= '', y = '', title = 'Raw Length Observations') +
+    theme(legend.position = 'top')
+
+
+  ## plot residual map
+  p3 <- ggplot() +
+    geom_sf(data = us, fill = NA, color = 'black') +
+    geom_point(data = dat_plot, aes(x = long, y= lat, size= resid, color = resid))+
+    # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
+    # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
+    scale_y_continuous(limits = c(50,71)) +
+    scale_x_continuous(limits = c(-185,-130))+
+    guides(size = 'none')+
+    theme_minimal() +
+    scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat_plot$resid)) +
+    labs(color = '', x= '', y = '', title = 'Length Residuals') +
+    theme(legend.position = 'top')
+
+
   if(showPlot){
-
-
-    ## plot raw length-age obs
-
-    p1 <- ggplot(dat_plot, aes(x = age, y = length, color = factor(year))) +
-      geom_point() +
-      theme_minimal()+ theme(legend.position = 'none')+
-      labs(x = 'Age', y = 'Length', color = 'year', title = 'Raw length-at-age observations')
-
-    ## plot raw length-age map
-    data(us)
-
-    p2 <- ggplot() +
-      geom_sf(data = us, fill = NA, color = 'black') +
-      geom_point(data = dat_plot, aes(x = long, y= lat, size= length, color = length))+
-      # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
-      # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
-      scale_y_continuous(limits = c(50,71)) +
-      scale_x_continuous(limits = c(-185,-130))+
-      guides(size = 'none')+
-      theme_minimal() +
-      scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
-      labs(color = '', x= '', y = '', title = 'Raw Length Observations') +
-      theme(legend.position = 'top')
-
-
-    ## plot residual map
-    p3 <- ggplot() +
-      geom_sf(data = us, fill = NA, color = 'black') +
-      geom_point(data = dat_plot, aes(x = long, y= lat, size= resid, color = resid))+
-      # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
-      # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
-      scale_y_continuous(limits = c(50,71)) +
-      scale_x_continuous(limits = c(-185,-130))+
-      guides(size = 'none')+
-      theme_minimal() +
-      scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat_plot$resid)) +
-      labs(color = '', x= '', y = '', title = 'Length Residuals') +
-      theme(legend.position = 'top')
-
-    return(list(p1,p2,p3))
-
+    print(p1); print(p2);print(p3)
   }
+  return(list(p1,p2,p3))
 }
 
 

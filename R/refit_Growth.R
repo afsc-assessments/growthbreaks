@@ -73,8 +73,8 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
 
   ## data frame with observed and predicted values
   fits_df <-  bind_cols(ypred =  rep$value[names(rep$value)=='ypreds'],
-                     ypred_sd = rep$sd[names(rep$value)=='ypreds'],
-                     combined_df) %>%
+                        ypred_sd = rep$sd[names(rep$value)=='ypreds'],
+                        combined_df) %>%
     mutate(lower = ypred - 1.96*ypred_sd^2,
            upper = ypred + 1.96*ypred_sd^2)
 
@@ -109,17 +109,17 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
 
 
 
-  if(showPlot){
-    ## panel plot of par ests and CIs
-    p1 <- ggplot(pars_df, aes(x = strata, y = value, color = matchcol)) +
-      geom_point()+
-      geom_errorbar(width = 0, aes(ymin = lower, ymax = upper)) +
-      scale_color_manual(values = c('red','black'))+
-      theme_minimal()+
-      theme(legend.position = 'none',
-            axis.text.x = element_text(angle = 90))+
-      labs(x = 'strata', y = '') +
-      facet_wrap(variable~., scales = 'free_y')
+
+  ## panel plot of par ests and CIs
+  p1 <- ggplot(pars_df, aes(x = strata, y = value, color = matchcol)) +
+    geom_point()+
+    geom_errorbar(width = 0, aes(ymin = lower, ymax = upper)) +
+    scale_color_manual(values = c('red','black'))+
+    theme_minimal()+
+    theme(legend.position = 'none',
+          axis.text.x = element_text(angle = 90))+
+    labs(x = 'strata', y = '') +
+    facet_wrap(variable~., scales = 'free_y')
 
   ## panel plot of obs and fits
   ## TODO include sigma around estimates
@@ -130,16 +130,13 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
     theme_minimal()+
     labs(x = 'strata', y = '') +theme(legend.position = 'none') +
     facet_wrap(~DES)
-
-  print(p1);print(p2)
+  if(showPlot){
+    print(p1);print(p2)
   }
-
-  ## save stuff
-  # unlist(lapply(split_tables,nrow))
 
   return(list(split_tables,
               fits_df,
-              pars_df))
+              pars_df, p1, p2))
 
 
 }
