@@ -102,12 +102,13 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
   if(showPlot){
     data(us)
   p1 <- ggplot() +
-    geom_hline(data = breakpoints, aes(yintercept = lat), lty = 'dashed')+
-    geom_vline(data = breakpoints, aes(xintercept = long), lty = 'dashed')+
+
     # geom_hline(data = breakpoints, aes(yintercept = lat, alpha = count), lty = 'dashed')+
     # geom_vline(data = breakpoints, aes(xintercept = long, alpha = count), lty = 'dashed')+
     geom_sf(data = us, fill = NA, color = 'black') +
     geom_point(data = dat, aes(x = long, y= lat, size= length, color = length))+
+    geom_hline(data = breakpoints, aes(yintercept = lat), lty = 'dashed')+
+    geom_vline(data = breakpoints, aes(xintercept = long), lty = 'dashed')+
     # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
     # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
     scale_y_continuous(limits = c(50,71)) +
