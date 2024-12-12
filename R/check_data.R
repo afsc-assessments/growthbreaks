@@ -4,6 +4,9 @@
 #' @param showPlot logical. do you want to visualize your input data?
 #' @return plots
 #' @export
+
+
+
 check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
   ## header checks
@@ -44,8 +47,7 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
     p1 <- ggplot(dat_plot, aes(x = age, y = length, color = factor(year))) +
       geom_point() +
-      theme_minimal()+
-      # guides(color = 'none')+
+      theme_minimal()+ theme(legend.position = 'none')+
       labs(x = 'Age', y = 'Length', color = 'year', title = 'Raw length-at-age observations')
 
     ## plot raw length-age map
@@ -58,7 +60,7 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
       # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
       scale_y_continuous(limits = c(50,71)) +
       scale_x_continuous(limits = c(-185,-130))+
-      guides(size = 'none', color = 'none')+
+      guides(size = 'none')+
       theme_minimal() +
       scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
       labs(color = '', x= '', y = '', title = 'Raw Length Observations') +
