@@ -2,7 +2,6 @@
 #' @param dat data.frame with columns year, age, length, lat, long, sex (optional)
 #' @param breakpoints data.frame with columns year and/or lat and long. can be output of {get_Breaks}.
 #' @param showPlot logical. do you want to see plots of the fitted curves?
-#' @import purrr, TMB
 #' @return Von B growth parameters at input breakpoints; plots with uncertainty of growth curves
 #' @export
 
