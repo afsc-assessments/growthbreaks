@@ -85,25 +85,25 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
                      strata = rep(strata_names, 6)) %>%
     mutate(lower = value - 1.96*value_sd^2,
            upper = value + 1.96*value_sd^2)
-  rep0 <- rep0 %>%
+  pars_df <- rep0 %>%
     filter(!(variable %in% c('L1','L2'))) %>%
     select(strata, variable, value, value_sd, lower, upper)
 
   ## check overlap across strata
   # Initialize the matchcol column with FALSE
-  rep0$matchcol <- FALSE
+  pars_df$matchcol <- FALSE
 
   # Loop through each row of the dataframe
-  for (i in 1:nrow(rep0)) {
+  for (i in 1:nrow(pars_df)) {
     # Get the current row
-    current_row <- rep0[i, ]
+    current_row <- pars_df[i, ]
 
     # Get the rows with the same variable but different strata
-    other_rows <- rep0[rep0$variable == current_row$variable & rep0$strata != current_row$strata, ]
+    other_rows <- pars_df[pars_df$variable == current_row$variable & pars_df$strata != current_row$strata, ]
 
     # Check if the value is within the lower and upper bounds of any other row
     if (any(current_row$value >= other_rows$lower & current_row$value <= other_rows$upper)) {
-      rep0$matchcol[i] <- TRUE
+      pars_df$matchcol[i] <- TRUE
     }
   }
 
@@ -111,7 +111,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
 
   if(showPlot){
     ## panel plot of par ests and CIs
-    p1 <- ggplot(rep0, aes(x = strata, y = value, color = matchcol)) +
+    p1 <- ggplot(pars_df, aes(x = strata, y = value, color = matchcol)) +
       geom_point()+
       geom_errorbar(width = 0, aes(ymin = lower, ymax = upper)) +
       scale_color_manual(values = c('red','black'))+
@@ -131,13 +131,15 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
     labs(x = 'strata', y = '') +theme(legend.position = 'none') +
     facet_wrap(~DES)
 
-
+  print(p1);print(p2)
   }
 
   ## save stuff
-  unlist(lapply(split_tables,nrow))
+  # unlist(lapply(split_tables,nrow))
 
-
+  return(list(split_tables,
+              fits_df,
+              pars_df))
 
 
 }
