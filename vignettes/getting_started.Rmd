@@ -165,20 +165,39 @@ p2 <- ggplot() +
 
 The first step is to ensure your data are formatted correctly and to be aware of any sample size issues. This is accomplished via `check_data()`, which returns plots of the observations and residuals.
 
-```{r, echo = FALSE, include = TRUE, warning = FALSE}
+```{r, echo = TRUE, include = TRUE, warning = FALSE}
 library(growthbreaks)
-data(simulated_data) ## load it from the package
-check_data(simulated_data, showPlot = TRUE)
+data(simulated_data) ## from the package
+head(simulated_data)
+p <- check_data(simulated_data, showPlot = TRUE)
 ```
 
-If you passed that step you are ready to investigate potential breakpoints in length-at-age via `get_Breaks()`. This example will use the default option `axes = 0` which looks for spatial breakpoints only. The function is ignorant of any underlying structure in the data and is not fitting growth curves at this time. If you keep the default settings you will get back plots of the hypothesized breaks as well as a dataframe with the breakpoints. Based on the raw observations, we'd probably expect to see a break somewhere towards the north.
+The first plot (`p[[1]]`) shows the input data:
 
-The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages.
+```{r, echo = FALSE, include = TRUE, warning = FALSE} 
+p[[1]]
+```
 
+And the second two plots `p[[2]];p[[3]]` are maps of the observations and simple residuals (observation - age-specific mean). The red colors are the highest values.
+
+```{r, echo = FALSE, include = TRUE, warning = FALSE} 
+p[[2]]
+p[[3]]
+```
+
+
+If you passed that step you are ready to investigate potential breakpoints in length-at-age via `get_Breaks()`. This example will use the default option `axes = 0` which looks for spatial breakpoints only. The function is ignorant of any underlying structure in the data and is not fitting growth curves at this time. If you keep the default settings you will get back plots of the hypothesized breaks as well as a dataframe with the breakpoints.
+
+# Detecting Breakpoints with `get_Breaks()`
+
+The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages and saving the output to a dataframe called `breakpoints`.
+
+Based on the raw observations, we'd probably expect to see a break somewhere towards the north, and sure enough there is a detected break at about 66$\deg$N.
 
 
 ```{r}
-get_Breaks(dat = simulated_data, ages_to_use = c(5,10,15), sex = FALSE, axes = 0, showPlot = TRUE)
+breakpoints <- get_Breaks(dat = simulated_data, ages_to_use = c(5,10,15), sex = FALSE, axes = 0, showPlot = TRUE)
+breakpoints
 ```
 
 
