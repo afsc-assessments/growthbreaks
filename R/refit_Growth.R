@@ -20,8 +20,12 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
     purrr::map2(split_tables, names(split_tables), ~mutate(.x, DES = .y))
   )
 
+  ## check dimensions and warn
+  combined_df_dims <- combined_df %>% summarise(n=n(), .by = 'DES')
+  if(any(combined_df_dims$n < 50)) warning("very few datapoints in some strata; consider dropping a break")
+
   combined_df$Sel <- 1 ## TODO include the penalty later for optional length selex
-  combined_df$selType <- 1 ## TODO include the penalty later for optional length selex;
+  combined_df$selType <- 1 ## TODO include the penalty later for optional length selex
 
   nStrata <- length(split_tables)
   strata_names <- names(split_tables)
@@ -60,7 +64,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
       iter.max = 10000
     )
   )
-  # for (k in 1:3)  fit <- nlminb(model$env$last.par.best, model$fn, model$gr) ## start at last-best call, for stability
+  for (k in 1:3)  fit <- nlminb(model$env$last.par.best, model$fn, model$gr) ## start at last-best call, for stability
   model$report()$denominator ## if we only ran seltype 2 points, this should NOT be 1.0
   best <- model$env$last.par.best
   rep <- sdreport(model)
