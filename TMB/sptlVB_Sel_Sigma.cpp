@@ -1,3 +1,4 @@
+#define TMB_LIB_INIT R_init_growthbreaks
 // https://kaskr.github.io/adcomp/register_atomic_8cpp-example.html#a3
 // Similar to example 'adaptive_integration' using CppAD Romberg integration. REGISTER_ATOMIC is used to reduce tape size.
 #include <TMB.hpp>
