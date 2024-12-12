@@ -7,9 +7,6 @@
 
 refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE){
 
-  # if(mean(dat) > 1000) dat$length/1000; cat('divided input lengths by 1000 \n')
-
-
   # Apply the function to each row of df2
   split_tables <- purrr::map(1:nrow(breakpoints), function(i) {
     generate_conditions(df1=dat, row = breakpoints[i, ])
@@ -52,7 +49,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
 
   # Now estimate everything
   map <- NULL
-  model <- MakeADFun(data, parameters,  DLL="sptlVB_Sel_Sigma",silent=T,map=map)
+  model <- TMB::MakeADFun(data, parameters,  DLL="sptlVB_Sel_Sigma",silent=T,map=map)
   fit <- nlminb(
     model$par,
     model$fn,
@@ -82,7 +79,9 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
                      strata = rep(strata_names, 6)) %>%
     mutate(lower = value - 1.96*value_sd^2,
            upper = value + 1.96*value_sd^2)
-  rep0 <- rep0 %>% select(strata, variable, value, value_sd, lower, upper)
+  rep0 <- rep0 %>%
+    filter(!(variable %in% c('L1','L2'))) %>%
+    select(strata, variable, value, value_sd, lower, upper)
 
   ## check overlap across strata
   # Initialize the matchcol column with FALSE
