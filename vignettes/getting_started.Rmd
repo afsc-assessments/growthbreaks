@@ -171,6 +171,15 @@ data(simulated_data) ## load it from the package
 check_data(simulated_data, showPlot = TRUE)
 ```
 
- 
+If you passed that step you are ready to investigate potential breakpoints in length-at-age via `get_Breaks()`. This example will use the default option `axes = 0` which looks for spatial breakpoints only. The function is ignorant of any underlying structure in the data and is not fitting growth curves at this time. If you keep the default settings you will get back plots of the hypothesized breaks as well as a dataframe with the breakpoints. Based on the raw observations, we'd probably expect to see a break somewhere towards the north.
+
+The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages.
+
+
+
+```{r}
+get_Breaks(dat = simulated_data, ages_to_use = c(5,10,15), sex = FALSE, axes = 0, showPlot = TRUE)
+```
+
 
 
