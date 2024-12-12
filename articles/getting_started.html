@@ -73,16 +73,57 @@ cline.</p>
 be aware of any sample size issues. This is accomplished via
 <code><a href="../reference/check_data.html">check_data()</a></code>, which returns plots of the observations and
 residuals.</p>
-<pre><code><span><span class="co">#&gt; [[1]]</span></span></code></pre>
-<p><img src="getting_started_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[2]]</span></span></code></pre>
-<p><img src="getting_started_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
-<pre><code><span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; [[3]]</span></span></code></pre>
-<p><img src="getting_started_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://afsc-assessments.github.io/growthbreaks/">growthbreaks</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">simulated_data</span><span class="op">)</span> <span class="co">## from the package</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">simulated_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   year age    length      lat      long</span></span>
+<span><span class="co">#&gt; 2    1   1  5.174880 56.97959 -156.2602</span></span>
+<span><span class="co">#&gt; 3    1   1  6.532786 57.34694 -142.2419</span></span>
+<span><span class="co">#&gt; 5    1   2  9.067383 56.61224 -151.8233</span></span>
+<span><span class="co">#&gt; 7    1   2 13.178737 67.63265 -169.8984</span></span>
+<span><span class="co">#&gt; 8    1   2 16.415712 55.14286 -169.2174</span></span>
+<span><span class="co">#&gt; 9    1   2 19.372655 51.46939 -148.3869</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/check_data.html">check_data</a></span><span class="op">(</span><span class="va">simulated_data</span>, showPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p>The first plot (<code>p[[1]]</code>) shows the input data:</p>
+<p><img src="getting_started_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>And the second two plots <code>p[[2]];p[[3]]</code> are maps of the
+observations and simple residuals (observation - age-specific mean). The
+red colors are the highest values.</p>
+<p><img src="getting_started_files/figure-html/unnamed-chunk-6-1.png" width="700"><img src="getting_started_files/figure-html/unnamed-chunk-6-2.png" width="700"></p>
+<p>If you passed that step you are ready to investigate potential
+breakpoints in length-at-age via <code><a href="../reference/get_Breaks.html">get_Breaks()</a></code>. This example
+will use the default option <code>axes = 0</code> which looks for
+spatial breakpoints only. The function is ignorant of any underlying
+structure in the data and is not fitting growth curves at this time. If
+you keep the default settings you will get back plots of the
+hypothesized breaks as well as a dataframe with the breakpoints.</p>
 </div>
-  </main>
+<div class="section level2">
+<h2 id="detecting-breakpoints-with-get_breaks">Detecting Breakpoints with <code>get_Breaks()</code><a class="anchor" aria-label="anchor" href="#detecting-breakpoints-with-get_breaks"></a>
+</h2>
+<p>The <code>ages_to_use</code> argument allows you to specify a subset
+of your age observations for which you’d like to test for breakpoints.
+If you are unsure, you may choose to use age(s) that are well sampled in
+your data. However, you will want to include at least some observations
+of small (young) fish, since discrepancies in size may be less obvious
+for fish at or near their asymptotic length. Here I am testing three
+ages and saving the output to a dataframe called
+<code>breakpoints</code>.</p>
+<p>Based on the raw observations, we’d probably expect to see a break
+somewhere towards the north, and sure enough there is a detected break
+at about
+66<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>deg</mo><annotation encoding="application/x-tex">\deg</annotation></semantics></math>N.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">breakpoints</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_Breaks.html">get_Breaks</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">simulated_data</span>, ages_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">10</span>,<span class="fl">15</span><span class="op">)</span>, sex <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="fl">0</span>, showPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="getting_started_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">breakpoints</span></span>
+<span><span class="co">#&gt;         lat      long detected_break     count</span></span>
+<span><span class="co">#&gt; 87 65.63636 -141.4534           TRUE 0.3333333</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
