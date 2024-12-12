@@ -14,8 +14,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, eval = TRUE, echo= FALSE, warning = FALSE, message = FALSE}
+```{r setup, eval = TRUE, echo= TRUE, warning = FALSE, message = FALSE}
 library(MASS)
+library(purrr)
+library(TMB)
 library(dplyr)
 library(ggplot2)
 library(sf)
@@ -101,7 +103,7 @@ sample_value <- function(group) {
 } 
 dat$lat <- sapply(as.numeric(dat$year), sample_value) 
 # Plot the data
-cols <- c("#86BBD8","#2F4858", "#F6AE2D", "#F26419", "#E86A92", "#57A773") 
+ 
 p1 <- ggplot(dat, aes(x = age, y = length, colour = group)) +
   geom_point(size = 2) + 
   # scale_colour_manual(values=cols) +
@@ -169,7 +171,7 @@ The first step is to ensure your data are formatted correctly and to be aware of
 library(growthbreaks)
 data(simulated_data) ## from the package
 head(simulated_data)
-p <- check_data(simulated_data, showPlot = TRUE)
+p <- check_data(simulated_data, showPlot = FALSE)
 ```
 
 The first plot (`p[[1]]`) shows the input data:
@@ -188,17 +190,67 @@ p[[3]]
 
 If you passed that step you are ready to investigate potential breakpoints in length-at-age via `get_Breaks()`. This example will use the default option `axes = 0` which looks for spatial breakpoints only. The function is ignorant of any underlying structure in the data and is not fitting growth curves at this time. If you keep the default settings you will get back plots of the hypothesized breaks as well as a dataframe with the breakpoints.
 
-# Detecting Breakpoints with `get_Breaks()`
+# Detecting Breakpoints 
+Now we can pass our data to `get_Breaks()`.
+
 
 The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages and saving the output to a dataframe called `breakpoints`.
 
-Based on the raw observations, we'd probably expect to see a break somewhere towards the north, and sure enough there is a detected break at about 66$\deg$N.
+As we might have expected based on the raw observations, the algorithm detected a break at about $66^{\circ}$N. We can see this on the map as well as in the dataframe. *You may choose to stop here. If you're interested in some of the automated checking and curve fitting functionality, proceed to the next step*.
 
-
-```{r}
+```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 breakpoints <- get_Breaks(dat = simulated_data, ages_to_use = c(5,10,15), sex = FALSE, axes = 0, showPlot = TRUE)
 breakpoints
 ```
 
+# Re-fitting growth curves at putative breaks
+
+The function `refit_Growth()` can be used to generate plots of the growth parameters and associated curves by splitting your data into the spatio/temporal zones ("strata") defined by `breakpoints`. This can allow you to make inferences about a) the magnitude and significance of differences in individual parameters and b) the resultant impact on our perception of length-at-age.
+
+*It is common for growth curves to be quite similar across strata, so user judgment is required to discern the best use of the information provided here*.
+
+First, ensure the TMB model is loaded. 
+
+```{r, echo = TRUE, include = TRUE, warning = FALSE} 
+TMB::compile(here::here("TMB","sptlVB_Sel_Sigma.cpp"))
+dyn.load(TMB::dynlib(here::here("TMB","sptlVB_Sel_Sigma")))
+```
+
+Let's first run the function with the breakpoints as-is and inspect the outputs.
+
+```{r, echo = TRUE, include = TRUE, warning = FALSE} 
+fits1 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)
+
+names(fits1$split_tables) ## description of the strata used; split_tables contains your observed data broken up by strata
+```
+
+We can inspect the fitted curves in two ways: first, by visualizing the `$par_plot`. The red points & error bars indicate estimates for which the mean fell outside the confidence interval(s) for other strata. This can be used to infer which components of the growth curve are possibly contributing to detected differences among strata. It doesn't look like the second strata's $L_{\infty}$ nor $k$ values are very different than the other regions'.
+
+```{r, echo = TRUE, include = TRUE, warning = FALSE} 
+fits1$pars_plot
+```
+
+The second way to explore the results are by visualizing the fitted curves against the strata-specific observations contained in `$fits_plot`. Here we see that the second and third strata (all data points below $66^{\circ}$)N exhhibit very similar curves, and there are not many data points in the second strata to begin with. 
+
+```{r}
+fits1$fits_plot
+```
+
+# Updating and re-fitting the breakpoints
+
+Based on the exploration above, you may decide to manually combine the second and third strata. In this case, we would do away with the breakpoint at $-141^{\circ}$)W, replacing it with `-Inf`:
+
+
+```{r, echo = TRUE, include = TRUE, warning = FALSE} 
+breakpoints$long <- -Inf ## eliminate the longitudinal breakpoint based on explorations above
+fits2 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE) ## refit the curves
+```
+
+We can repeat the visualization and see that 1) the parameter values are now more distinct from one another and 2) so are the curves.
+
+```{r, echo = TRUE, include = TRUE, warning = FALSE} 
+fits2$pars_plot
+fits2$fits_plot
+```
 
 

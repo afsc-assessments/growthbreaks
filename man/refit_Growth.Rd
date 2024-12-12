@@ -14,7 +14,14 @@ refit_Growth(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE)
 \item{showPlot}{logical. do you want to see plots of the fitted curves?}
 }
 \value{
-Von B growth parameters at input breakpoints; plots with uncertainty of growth curves
+Von B growth parameters at input breakpoints; plots with uncertainty of growth curves:
+  \describe{
+    \item{\code{$split_tables}}{list of tables of input data split by strata specified in breakpoints}
+    \item{\code{$fits_df}}{input data, estimates and associated standard errors as single dataframe}
+    \item{\code{$pars_df}}{Parameter estimates and associated standard errors}
+    \item{\code{$fits_plot}}{input observations and fitted growth curves, by strata}
+    \item{\code{$pars_plot}}{Parameter estimates and associated standard errors; red lines indicate statistically significant differences}
+  }
 }
 \description{
 Function to re-fit growth data at putative breaks and return estimates for validation

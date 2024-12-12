@@ -7,6 +7,8 @@ logistic <- function(ages, a50, delta){
   1/(1+exp(-log(19)*(ages-a50)/delta))
 }
 
+cols <- c("#86BBD8","#2F4858", "#F6AE2D", "#F26419", "#E86A92", "#57A773")
+
 vonB_optim <- function(pars, ages_use, obs){
   linf <- pars[1]
   k <- pars[2]
