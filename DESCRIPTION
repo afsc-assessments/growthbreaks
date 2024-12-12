@@ -30,6 +30,9 @@ Imports:
     rnaturalearthdata,
     gridExtra,
     here
+LinkingTo:
+    TMB (>= 1.8.1),
+    RcppEigen (>= 0.3.3.9.1)
 Suggests: 
     knitr,
     rmarkdown
