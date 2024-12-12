@@ -225,7 +225,8 @@ Then, run the function with the breakpoints as-is and inspect the outputs.
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 fits1 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)
 
-names(fits1$split_tables) ## description of the strata used; split_tables contains your observed data broken up by strata
+names(fits1$split_tables) ## description of the strata used
+## split_tables contains your observed data broken up by strata
 ```
 
 We can inspect the fitted curves in two ways: first, by visualizing the `$par_plot`. The red points & error bars indicate estimates for which the mean fell outside the confidence interval(s) for other strata. This can be used to infer which components of the growth curve are possibly contributing to detected differences among strata. It doesn't look like the second strata's $L_{\infty}$ nor $k$ values are very different than the other regions'.
