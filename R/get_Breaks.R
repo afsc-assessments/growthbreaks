@@ -6,8 +6,6 @@
 #' @param showPlot logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.
 #' @import mgcv
 #' @return matrix of detected breakpoints and plots
-#' @examples  \dontrun{ data(simulated_data) ;get_Breaks(dat = simulated_data, ages_to_use = c(15:20), axes = 0)
-#' }
 #' @export
 
 

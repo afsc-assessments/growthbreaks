@@ -9,7 +9,7 @@ refit_Growth(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE)
 \arguments{
 \item{dat}{data.frame with columns year, age, length, lat, long, sex (optional)}
 
-\item{breakpoints}{data.frame with columns year and/or lat and long. can be output of {get_Breaks}.}
+\item{breakpoints}{data.frame with columns year and/or lat and long. can be output of {get_Breaks()}.}
 
 \item{showPlot}{logical. do you want to see plots of the fitted curves?}
 }

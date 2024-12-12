@@ -1,6 +1,6 @@
 #' Re-fit growth data at putative breaks and return estimates for validation
 #' @param dat data.frame with columns year, age, length, lat, long, sex (optional)
-#' @param breakpoints data.frame with columns year and/or lat and long. can be output of {get_Breaks}.
+#' @param breakpoints data.frame with columns year and/or lat and long. can be output of {get_Breaks()}.
 #' @param showPlot logical. do you want to see plots of the fitted curves?
 #' @return Von B growth parameters at input breakpoints; plots with uncertainty of growth curves:
 #'   \describe{

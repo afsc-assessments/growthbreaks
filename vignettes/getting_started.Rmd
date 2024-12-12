@@ -216,8 +216,8 @@ The function `refit_Growth()` can be used to generate plots of the growth parame
 First, ensure the TMB model is loaded. 
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
-TMB::compile(here::here("TMB","sptlVB_Sel_Sigma.cpp"))
-dyn.load(TMB::dynlib(here::here("TMB","sptlVB_Sel_Sigma")))
+# TMB::compile(here::here("TMB","sptlVB_Sel_Sigma.cpp"))
+# dyn.load(TMB::dynlib(here::here("TMB","sptlVB_Sel_Sigma")))
 ```
 
 Then, run the function with the breakpoints as-is and inspect the outputs.

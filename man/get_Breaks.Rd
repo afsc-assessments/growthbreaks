@@ -23,7 +23,3 @@ matrix of detected breakpoints and plots
 \description{
 Wrapper function to to fit gams & evaluate first derivatives
 }
-\examples{
- \dontrun{ data(simulated_data) ;get_Breaks(dat = simulated_data, ages_to_use = c(15:20), axes = 0)
-}
-}
