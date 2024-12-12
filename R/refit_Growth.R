@@ -134,9 +134,11 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
     print(p1);print(p2)
   }
 
-  return(list(split_tables,
-              fits_df,
-              pars_df, p1, p2))
+  return(list("split_tables" = split_tables,
+              "fits_df" = fits_df,
+              "pars_df" = pars_df,
+              "pars_plot" = p1,
+              "fits_plot" = p2))
 
 
 }

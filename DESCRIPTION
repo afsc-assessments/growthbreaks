@@ -28,7 +28,8 @@ Imports:
     MASS,
     rnaturalearth,
     rnaturalearthdata,
-    gridExtra
+    gridExtra,
+    here
 Suggests: 
     knitr,
     rmarkdown
