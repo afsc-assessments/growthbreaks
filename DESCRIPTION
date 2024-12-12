@@ -12,7 +12,7 @@ LazyData: true
 Depends:
     R (>= 3.6.0)
 Imports:
-    TMB (>= 1.9.0),
+    TMB,
     tidyr (>= 1.1.2),
     dplyr (>= 1.0.2),
     ggplot2 (>= 3.3.2),
@@ -31,8 +31,7 @@ Imports:
     gridExtra,
     here
 LinkingTo:
-    TMB (>= 1.8.1),
-    RcppEigen (>= 0.3.3.9.1)
+    TMB (>= 1.8.1) 
 Suggests: 
     knitr,
     rmarkdown
