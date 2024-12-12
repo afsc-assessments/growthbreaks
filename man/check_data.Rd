@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_data.R
 \name{check_data}
 \alias{check_data}
-\title{load, check and plot input data for use in breakpoint detection}
+\title{Load, check and plot input data for use in breakpoint detection}
 \usage{
 check_data(dat, sex = FALSE, showPlot = TRUE)
 }
@@ -17,5 +17,5 @@ check_data(dat, sex = FALSE, showPlot = TRUE)
 plots
 }
 \description{
-load, check and plot input data for use in breakpoint detection
+Load, check and plot input data for use in breakpoint detection
 }

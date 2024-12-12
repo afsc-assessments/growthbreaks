@@ -2,7 +2,7 @@
 % Please edit documentation in R/refit_Growth.R
 \name{refit_Growth}
 \alias{refit_Growth}
-\title{Function to re-fit growth data at putative breaks and return estimates for validation}
+\title{Re-fit growth data at putative breaks and return estimates for validation}
 \usage{
 refit_Growth(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE)
 }
@@ -24,5 +24,5 @@ Von B growth parameters at input breakpoints; plots with uncertainty of growth c
   }
 }
 \description{
-Function to re-fit growth data at putative breaks and return estimates for validation
+Re-fit growth data at putative breaks and return estimates for validation
 }
