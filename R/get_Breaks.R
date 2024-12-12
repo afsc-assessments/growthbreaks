@@ -5,7 +5,7 @@
 #' @param axes do you want to evaluate axes for space only (0, default), time only (1), or both simultaneously (2)?
 #' @param showPlot logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.
 #' @export
-#' @import ggplot2
+#' @import ggplot2, mgcv
 #' @return matrix of detected breakpoints and plots
 #' @examples  \dontrun{ data(simulated_data) ;get_Breaks(dat = simulated_data, ages_to_use = c(15:20), axes = 0)
 #' }
@@ -51,9 +51,9 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
     dat_use <- age_split[ages_to_use][[iage]]
     ##TODO split by sex here breakpoints$sex <- ifelse(sex)
 
-    if(axes == 0)  mod <- gam(length ~ s(lat) + s(long), data = dat_use)
-    if(axes == 1)  mod <- gam(length ~ s(year, bs = "cc"), data = dat_use)
-    if(axes == 2)  mod <- gam(length ~ s(year, bs = "cc") + s(lat) + s(long),data = dat_use)
+    if(axes == 0)  mod <- mgcv::gam(length ~ s(lat) + s(long), data = dat_use)
+    if(axes == 1)  mod <- mgcv::gam(length ~ s(year, bs = "cc"), data = dat_use)
+    if(axes == 2)  mod <- mgcv::gam(length ~ s(year, bs = "cc") + s(lat) + s(long),data = dat_use)
 
     ## get & eval derivatives ----
 
