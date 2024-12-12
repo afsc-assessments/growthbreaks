@@ -33,10 +33,12 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
   if(any(yeardims$n< 10)) warning(paste0('low sample sizes for years ',  unique(yeardims$year[yeardims$n < 10])))
   if(any(bothdims$n < 5)) warning(paste0('low sample sizes for years ',  unique(bothdims$year[bothdims$n < 10])))
 
+  dat_plot <- dat %>%
+    mutate(meanL = mean(length), .by = ifelse(sex, c('sex','age'), 'age')) %>%
+    mutate(resid = length-meanL)
+
   if(showPlot){
-    dat_plot <- dat %>%
-      mutate(meanL = mean(length), .by = ifelse(sex, c('sex','age'), 'age')) %>%
-      mutate(resid = length-meanL)
+
 
     ## plot raw length-age obs
 
