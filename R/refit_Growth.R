@@ -27,6 +27,8 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
   combined_df$Sel <- 1 ## TODO include the penalty later for optional length selex
   combined_df$selType <- 1 ## TODO include the penalty later for optional length selex
 
+  non_empty <- which(lapply(split_tables, nrow) >0)
+  split_tables <- split_tables[non_empty]
   nStrata <- length(split_tables)
   strata_names <- names(split_tables)
   strata_factor <- as.numeric(as.factor(combined_df$DES))-1
