@@ -1,4 +1,4 @@
-#' load, check and plot input data for use in breakpoint detection
+#' Load, check and plot input data for use in breakpoint detection
 #' @param dat data.frame with columns year, age, length, sex (optional)
 #' @param sex logical. does your data frame include a sex column?
 #' @param showPlot logical. do you want to visualize your input data?

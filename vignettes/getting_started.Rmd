@@ -26,7 +26,7 @@ library(rnaturalearth)
 
 # Loading & viewing your data
 
-The example shown here will include a spatial process giving  rise to heterogeneity in fish length-at-age with a predominant north-south cline.  
+The example shown here will include a spatial process giving rise to heterogeneity in fish length-at-age with a predominant north-south cline.  
 
 ```{r, echo = FALSE, warning = FALSE}
 ## based on code by G.D. Adams
@@ -174,13 +174,13 @@ head(simulated_data)
 p <- check_data(simulated_data, showPlot = FALSE)
 ```
 
-The first plot (`p[[1]]`) shows the input data:
+The first plot (`p[[1]]`) shows the input data, colored by year:
 
 ```{r, echo = FALSE, include = TRUE, warning = FALSE} 
 p[[1]]
 ```
 
-And the second two plots `p[[2]];p[[3]]` are maps of the observations and simple residuals (observation - age-specific mean). The red colors are the highest values.
+The second two plots `p[[2]];p[[3]]` are maps of the observations and simple residuals (observation minus age-specific mean). The red colors are the highest values. We'd expect these to look fairly similar to one another.
 
 ```{r, echo = FALSE, include = TRUE, warning = FALSE} 
 p[[2]]
@@ -194,9 +194,9 @@ If you passed that step you are ready to investigate potential breakpoints in le
 Now we can pass our data to `get_Breaks()`.
 
 
-The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages and saving the output to a dataframe called `breakpoints`.
+The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data, or all ages. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages and saving the output to a dataframe called `breakpoints`.
 
-As we might have expected based on the raw observations, the algorithm detected a break at about $66^{\circ}$N. We can see this on the map as well as in the dataframe. *You may choose to stop here. If you're interested in some of the automated checking and curve fitting functionality, proceed to the next step*.
+As we might have expected based on the raw observations, the algorithm detected a break at about $66^{\circ}$N, as well as an unexpected one at $~141^{\circ}$W. We can see this on the map as well as in the dataframe. The `count` column indicates the proportion of tested ages for which this breakpoint was detected (in this case, 1/3, suggesting that no breakpoints were detected for 2/3 ages). *You may choose to stop here. If you're interested in some of the automated checking and curve fitting functionality, proceed to the next step*.
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 breakpoints <- get_Breaks(dat = simulated_data, ages_to_use = c(5,10,15), sex = FALSE, axes = 0, showPlot = TRUE)
@@ -207,7 +207,7 @@ breakpoints
 
 The function `refit_Growth()` can be used to generate plots of the growth parameters and associated curves by splitting your data into the spatio/temporal zones ("strata") defined by `breakpoints`. This can allow you to make inferences about a) the magnitude and significance of differences in individual parameters and b) the resultant impact on our perception of length-at-age.
 
-*It is common for growth curves to be quite similar across strata, so user judgment is required to discern the best use of the information provided here*.
+*It is common for growth curves to be very similar especially when the number of strata is large (>3), so user judgment is required to discern the best use of the information provided here*.
 
 First, ensure the TMB model is loaded. 
 
@@ -216,7 +216,7 @@ TMB::compile(here::here("TMB","sptlVB_Sel_Sigma.cpp"))
 dyn.load(TMB::dynlib(here::here("TMB","sptlVB_Sel_Sigma")))
 ```
 
-Let's first run the function with the breakpoints as-is and inspect the outputs.
+Then, run the function with the breakpoints as-is and inspect the outputs.
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 fits1 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)

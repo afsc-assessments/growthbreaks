@@ -1,4 +1,4 @@
-#' Function to re-fit growth data at putative breaks and return estimates for validation
+#' Re-fit growth data at putative breaks and return estimates for validation
 #' @param dat data.frame with columns year, age, length, lat, long, sex (optional)
 #' @param breakpoints data.frame with columns year and/or lat and long. can be output of {get_Breaks}.
 #' @param showPlot logical. do you want to see plots of the fitted curves?
