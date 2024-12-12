@@ -1,6 +1,6 @@
 # growthbreaks
 
-This package is designed to implement the GAM-based breakpoint detection method developed and tested in [Kapur et al. (2019)](https://www.sciencedirect.com/science/article/abs/pii/S0165783619302693).
+This package is designed to implement the GAM-based breakpoint detection method developed and tested in [Kapur et al. (2020)](https://www.sciencedirect.com/science/article/abs/pii/S0165783619302693).
 
 # Installation
 
