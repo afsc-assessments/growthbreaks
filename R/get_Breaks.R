@@ -4,12 +4,11 @@
 #' @param sex logical.
 #' @param axes do you want to evaluate axes for space only (0, default), time only (1), or both simultaneously (2)?
 #' @param showPlot logical. do you want to see the detected break(s) on a map? Applicable only for axes options 0 or 2.
-#' @export
-#' @import ggplot2, mgcv
+#' @import mgcv
 #' @return matrix of detected breakpoints and plots
 #' @examples  \dontrun{ data(simulated_data) ;get_Breaks(dat = simulated_data, ages_to_use = c(15:20), axes = 0)
 #' }
-
+#' @export
 
 
 get_Breaks <- function(dat, ages_to_use=c(5,10),
