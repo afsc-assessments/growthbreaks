@@ -163,10 +163,14 @@ p2 <- ggplot() +
 ```
 
 
-The first step is to ensure your data are formatted correctly and to be aware of any sample size issues. This is accomplished via check_data():
-```{r, echo = FALSE, include = TRUE}
+The first step is to ensure your data are formatted correctly and to be aware of any sample size issues. This is accomplished via `check_data()`, which returns plots of the observations and residuals.
+
+```{r, echo = FALSE, include = TRUE, warning = FALSE}
 library(growthbreaks)
 data(simulated_data) ## load it from the package
-# growthbreaks:::check_data(simulated_data, showPlot = TRUE)
+check_data(simulated_data, showPlot = TRUE)
 ```
+
+ 
+
 
