@@ -2,19 +2,17 @@
 #' @param dat data.frame with columns year, age, length, lat, long, sex (optional)
 #' @param breakpoints data.frame with columns year and/or lat and long. can be output of {get_Breaks}.
 #' @param showPlot logical. do you want to see plots of the fitted curves?
-
+#' @import purrr, TMB
 #' @return Von B growth parameters at input breakpoints; plots with uncertainty of growth curves
 #' @export
-#'
-#'
+
 refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE){
 
   # if(mean(dat) > 1000) dat$length/1000; cat('divided input lengths by 1000 \n')
-  TMB::compile("TMB/sptlVB_Sel_Sigma.cpp")
-  dyn.load(TMB::dynlib("TMB/sptlVB_Sel_Sigma"))
+
 
   # Apply the function to each row of df2
-  split_tables <- map(1:nrow(breakpoints), function(i) {
+  split_tables <- purrr::map(1:nrow(breakpoints), function(i) {
     generate_conditions(df1=dat, row = breakpoints[i, ])
   })
 
@@ -23,7 +21,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
 
   # Combine all elements of split_tables into a single data frame
   combined_df <- bind_rows(
-    map2(split_tables, names(split_tables), ~mutate(.x, DES = .y))
+    purrr::map2(split_tables, names(split_tables), ~mutate(.x, DES = .y))
   )
 
   combined_df$Sel <- 1 ## TODO include the penalty later for optional length selex

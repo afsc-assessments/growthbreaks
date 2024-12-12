@@ -21,4 +21,5 @@ vonB_optim <- function(pars, ages_use, obs){
 
 }
 
-vonB
+TMB::compile("TMB/sptlVB_Sel_Sigma.cpp")
+dyn.load(TMB::dynlib("TMB/sptlVB_Sel_Sigma"))
