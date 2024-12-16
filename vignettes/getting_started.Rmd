@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, eval = TRUE, echo= TRUE, warning = FALSE, message = FALSE}
+```{r setup, eval = TRUE, echo= FALSE, warning = FALSE, message = FALSE}
 library(MASS)
 library(purrr)
 library(TMB)
@@ -246,7 +246,7 @@ fits1$fits_plot
 
 # Updating and re-fitting the breakpoints
 
-Based on the exploration above, you may decide to manually combine the second and third strata. In this case, we would do away with the breakpoint at $-141^{\circ}$)W, replacing it with `-Inf`:
+Based on the exploration above, you may decide to manually combine the second and third strata, using just a single breakpoint north to south. In this case, we would do away with the breakpoint at $-141^{\circ}$)W, replacing it with `-Inf`:
 
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
