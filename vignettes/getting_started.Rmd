@@ -26,7 +26,7 @@ library(rnaturalearth)
 
 # Loading & viewing your data
 
-The example shown here will include a spatial process giving rise to heterogeneity in fish length-at-age with a predominant north-south cline.  
+The example shown here will include a simulated spatial process giving rise to heterogeneity in fish length-at-age with a predominant north-south cline.  
 
 ```{r, echo = FALSE, warning = FALSE}
 ## based on code by G.D. Adams
@@ -180,7 +180,7 @@ The first plot (`p[[1]]`) shows the input data, colored by year:
 p[[1]]
 ```
 
-The second two plots `p[[2]];p[[3]]` are maps of the observations and simple residuals (observation minus age-specific mean). The red colors are the highest values. We'd expect these to look fairly similar to one another.
+The second two plots `p[[2]];p[[3]]` are maps of the observations and simple residuals (observation minus age-specific mean). The red colors are the highest values. We'd expect these to look similar to one another.
 
 ```{r, echo = FALSE, include = TRUE, warning = FALSE} 
 p[[2]]
@@ -188,7 +188,7 @@ p[[3]]
 ```
 
 
-If you passed that step you are ready to investigate potential breakpoints in length-at-age via `get_Breaks()`. This example will use the default option `axes = 0` which looks for spatial breakpoints only. The function is ignorant of any underlying structure in the data and is not fitting growth curves at this time. If you keep the default settings you will get back plots of the hypothesized breaks as well as a dataframe with the breakpoints.
+Once you've completed that step you are ready to investigate potential breakpoints in length-at-age via `get_Breaks()`. This example will use the default option `axes = 0` which looks for spatial breakpoints only. The function is ignorant of any underlying structure in the data and is not fitting growth curves at this time. If you keep the default settings you will get back plots of the hypothesized breaks as well as a dataframe with the breakpoints.
 
 # Detecting Breakpoints 
 Now we can pass our data to `get_Breaks()`.
@@ -196,7 +196,7 @@ Now we can pass our data to `get_Breaks()`.
 
 The `ages_to_use` argument allows you to specify a subset of your age observations for which you'd like to test for breakpoints. If you are unsure, you may choose to use age(s) that are well sampled in your data, or all ages. However, you will want to include at least some observations of small (young) fish, since discrepancies in size may be less obvious for fish at or near their asymptotic length. Here I am testing three ages and saving the output to a dataframe called `breakpoints`.
 
-As we might have expected based on the raw observations, the algorithm detected a break at about $66^{\circ}$N, as well as an unexpected one at $~141^{\circ}$W. We can see this on the map as well as in the dataframe. The `count` column indicates the proportion of tested ages for which this breakpoint was detected (in this case, 1/3, suggesting that no breakpoints were detected for 2/3 ages). *You may choose to stop here. If you're interested in some of the automated checking and curve fitting functionality, proceed to the next step*.
+
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 breakpoints <- get_Breaks(dat = simulated_data,
@@ -206,6 +206,7 @@ breakpoints <- get_Breaks(dat = simulated_data,
                           showPlot = TRUE)
 breakpoints
 ```
+As we might have expected based on the raw observations, the algorithm detected a break at about $66^{\circ}$N, as well as an unexpected one at $~141^{\circ}$W. We can see this on the map as well as in the dataframe. The `count` column indicates the proportion of tested ages for which this breakpoint was detected (in this case, 1/3, suggesting that no breakpoints were detected for 2/3 ages). *You may choose to stop here. If you're interested in some of the automated checking and curve fitting functionality, proceed to the next step*.
 
 # Re-fitting growth curves at putative breaks
 

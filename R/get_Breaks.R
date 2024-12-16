@@ -120,7 +120,6 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
   }
   if(showPlot & axes != 1){
     print(p1)
-    print(p2)
   }
 
   return(breakpoints)
