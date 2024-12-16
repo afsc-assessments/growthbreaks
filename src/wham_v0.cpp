@@ -1,9 +1,9 @@
 #define TMB_LIB_INIT R_init_wham
 #include <TMB.hpp>
 #include <iostream>
-#include "helper_functions.hpp"
-#include "age_comp_osa.hpp"
-#include "age_comp_sim.hpp"
+// #include "helper_functions.hpp"
+// #include "age_comp_osa.hpp"
+// #include "age_comp_sim.hpp"
 
 template<class Type>
 Type objective_function<Type>::operator() ()
@@ -12,7 +12,7 @@ Type objective_function<Type>::operator() ()
 
   DATA_INTEGER(n_years_catch); //same as n_years_model
   DATA_INTEGER(n_years_indices); //same as n_years_model
-  DATA_INTEGER(n_years_model); 
+  DATA_INTEGER(n_years_model);
   DATA_INTEGER(n_ages);
   DATA_INTEGER(n_fleets);
   DATA_INTEGER(n_indices);
@@ -55,7 +55,7 @@ Type objective_function<Type>::operator() ()
   DATA_VECTOR(q_upper);
   DATA_IVECTOR(use_q_prior);
   DATA_VECTOR(logit_q_prior_sigma);
-  DATA_IVECTOR(use_q_re); //n_indices, 0= no re, >0 = use re 
+  DATA_IVECTOR(use_q_re); //n_indices, 0= no re, >0 = use re
   DATA_MATRIX(selpars_lower);
   DATA_MATRIX(selpars_upper);
   DATA_INTEGER(n_NAA_sigma); // 0 = SCAA, 1 = logR only, 2 = full state-space with shared sig_a for a > 1
@@ -97,7 +97,7 @@ Type objective_function<Type>::operator() ()
   DATA_IMATRIX(keep_E); // Ecov
   DATA_IARRAY(keep_Cpaa);
   DATA_IARRAY(keep_Ipaa);
-  DATA_IVECTOR(do_post_samp); //length = 5, whether to ADREPORT posterior residuals for NAA, M, selectivity, Ecov, q. 
+  DATA_IVECTOR(do_post_samp); //length = 5, whether to ADREPORT posterior residuals for NAA, M, selectivity, Ecov, q.
 
   // data for environmental covariate(s), Ecov
   DATA_INTEGER(n_Ecov); // also = 1 if no Ecov
@@ -130,7 +130,7 @@ Type objective_function<Type>::operator() ()
   DATA_SCALAR(logR_mean); // empirical mean recruitment in model years, used for SCAA recruit projections
   DATA_SCALAR(logR_sd); // empirical sd recruitment in model years, used for SCAA recruit projections
   DATA_VECTOR(F_proj_init); // annual initial values  to use for newton steps to find F for use in projections  (n_years_proj)
-  
+
   //static brp info
   DATA_INTEGER(which_F_age_static); //which age of F to use for full total F for static brps (max of average FAA_tot over avg_years_ind)
   DATA_SCALAR(static_FXSPR_init); // initial value to use for newton steps to find FXSPR_static
@@ -174,7 +174,7 @@ Type objective_function<Type>::operator() ()
   PARAMETER_ARRAY(Ecov_beta); // dim = (2 + n_indices) x n_poly x n_ecov x n_ages, beta_R in eqns 4-5, Miller et al. (2016)
   PARAMETER_MATRIX(Ecov_process_pars); // nrows = RW: 2 par (Ecov1, sig), AR1: 3 par (mu, sig, phi); ncol = N_ecov
   PARAMETER_MATRIX(Ecov_obs_logsigma); // N_Ecov_years x n_Ecov. options: just given (data), or fixed effect(s)
-  PARAMETER_MATRIX(Ecov_obs_logsigma_re); // N_Ecov_years x n_Ecov. columns of random effects used if Ecov_obs_sigma_opt = 4 
+  PARAMETER_MATRIX(Ecov_obs_logsigma_re); // N_Ecov_years x n_Ecov. columns of random effects used if Ecov_obs_sigma_opt = 4
   PARAMETER_MATRIX(Ecov_obs_sigma_par); // ncol = N_Ecov, nrows = 2 (mean, sigma of random effects)
 
   Type nll= 0.0; //negative log-likelihood
@@ -246,7 +246,7 @@ Type objective_function<Type>::operator() ()
       sigma = exp(sel_repars(b,0));
       rho = rho_trans(sel_repars(b,1)); // rho_trans ensures correlation parameter is between -1 and 1, see helper_functions.hpp
       rho_y = rho_trans(sel_repars(b,2)); // rho_trans ensures correlation parameter is between -1 and 1, see helper_functions.hpp
-      
+
       if((selblock_models_re(b) == 2) | (selblock_models_re(b) == 5)){
         // 2D AR1 process on selectivity parameter deviations
         Sigma_sig_sel = pow(pow(sigma,2) / ((1-pow(rho_y,2))*(1-pow(rho,2))),0.5);
@@ -255,20 +255,20 @@ Type objective_function<Type>::operator() ()
       } else {
         // 1D AR1 process on selectivity parameter deviations
         if(selblock_models_re(b) == 3){ // ar1 across parameters in selblock, useful for age-specific pars.
-          vector<Type> tmp0 = tmp.matrix().row(0); //random effects are constant across years 
+          vector<Type> tmp0 = tmp.matrix().row(0); //random effects are constant across years
           Sigma_sig_sel = pow(pow(sigma,2) / (1-pow(rho,2)),0.5);
           nll_sel += SCALE(AR1(rho), Sigma_sig_sel)(tmp0);
-          SIMULATE if(simulate_state(2) == 1) if(sum(simulate_period) > 0) 
+          SIMULATE if(simulate_state(2) == 1) if(sum(simulate_period) > 0)
           {
             AR1(rho).simulate(tmp0);
             for(int y = 0; y < tmp.rows(); y++) for(int i = 0; i < tmp0.size(); i++) tmp(y,i) = tmp0(i);
           }
         } else { // selblock_models_re(b) = 4, ar1_y, not sure if this one really makes sense.
-          vector<Type> tmp0 = tmp.matrix().col(0); //random effects are constant within years 
+          vector<Type> tmp0 = tmp.matrix().col(0); //random effects are constant within years
           Sigma_sig_sel = pow(pow(sigma,2) / (1-pow(rho_y,2)),0.5);
           //Sigma_sig_sel = sigma;
           nll_sel += SCALE(AR1(rho_y), Sigma_sig_sel)(tmp0);
-          SIMULATE if(simulate_state(2) == 1) if(sum(simulate_period) > 0)  
+          SIMULATE if(simulate_state(2) == 1) if(sum(simulate_period) > 0)
           {
             AR1(rho_y).simulate(tmp0);
             for(int a = 0; a < tmp.cols(); a++) tmp.col(a) = tmp0;
@@ -422,7 +422,7 @@ Type objective_function<Type>::operator() ()
     REPORT(Ecov_obs_logsigma);
   }
 
- 
+
   // Lag environmental covariates -------------------------------------
   // Then use Ecov_out(t) for processes in year t, instead of Ecov_x
   int n_effects = Ecov_beta.dim(0); // 2 + n_indices (recruitment, mortality and any catchabilities)
@@ -445,7 +445,7 @@ Type objective_function<Type>::operator() ()
   // Ecov_lm.setZero();
   // Ecov_lm stores the linear models for each Ecov and where it is used. dim = n_Ecov, n_effects, n_years_model + n_years_proj, n_ages
   // n_effects dimension is: 0: recruitment, 1: M, 2-1+n_indices: which catchability it affects
-  array<Type> Ecov_lm(n_Ecov, n_effects,n_years_model + n_years_proj, n_ages); 
+  array<Type> Ecov_lm(n_Ecov, n_effects,n_years_model + n_years_proj, n_ages);
   //vector<matrix<Type> > Ecov_lm(n_Ecov); // ecov linear model for each Ecov, dim = n_years_model + n_years_proj, n_ages
   for(int i = 0; i < n_Ecov; i++){
     for(int t = 0; t < n_effects; t++){
@@ -505,7 +505,7 @@ Type objective_function<Type>::operator() ()
               M_re(y,i) = Mre0(i);
             }
           }
-        }          
+        }
       } else { // M_re_model = 4, 1D ar1_y
         vector<Type> Mre0 = M_re.matrix().col(0);
         Sigma_M = pow(pow(sigma_M,2) / (1-pow(rho_M_y,2)),0.5);
@@ -537,7 +537,7 @@ Type objective_function<Type>::operator() ()
   // Construct mortality-at-age (MAA)
   matrix<Type> MAA(n_years_model + n_years_proj,n_ages);
   if(M_model == 2){ // age-specific M
-    for(int a = 0; a < n_ages; a++) for(int y = 0; y < n_years_model; y++) MAA(y,a) = exp(M_a(a) + M_re(y,a));   
+    for(int a = 0; a < n_ages; a++) for(int y = 0; y < n_years_model; y++) MAA(y,a) = exp(M_a(a) + M_re(y,a));
   } else {
     if(M_model == 1){ // constant M
       for(int a = 0; a < n_ages; a++) for(int y = 0; y < n_years_model; y++) MAA(y,a) = exp(M_a(0) + M_re(y,a));
@@ -546,8 +546,8 @@ Type objective_function<Type>::operator() ()
     }
   }
   // add to MAA in projection years
-  if(do_proj == 1){ 
-    if(proj_M_opt == 2){ // use average MAA over avg.yrs 
+  if(do_proj == 1){
+    if(proj_M_opt == 2){ // use average MAA over avg.yrs
       matrix<Type> MAA_toavg(n_toavg,n_ages);
       for(int a = 0; a < n_ages; a++){
         for(int i = 0; i < n_toavg; i++){
@@ -560,7 +560,7 @@ Type objective_function<Type>::operator() ()
       }
     } else { // proj_M_opt == 1, use M_re and/or ecov_lm in projection years
         if(M_model == 2){ // age-specific M
-          for(int a = 0; a < n_ages; a++) for(int y = n_years_model; y < n_years_model + n_years_proj; y++) MAA(y,a) = exp(M_a(a) + M_re(y,a));   
+          for(int a = 0; a < n_ages; a++) for(int y = n_years_model; y < n_years_model + n_years_proj; y++) MAA(y,a) = exp(M_a(a) + M_re(y,a));
         } else {
           if(M_model == 1){ // constant M
             for(int a = 0; a < n_ages; a++) for(int y = n_years_model; y < n_years_model + n_years_proj; y++) MAA(y,a) = exp(M_a(0) + M_re(y,a));
@@ -605,17 +605,17 @@ Type objective_function<Type>::operator() ()
   matrix<Type> logit_q_mat(n_years_model+n_years_proj, n_indices);
   logit_q_mat.setZero();
   for(int i = 0; i < n_indices; i++) {
-    
+
     //use prior for q? q_prior_re are random effects with mean logit_q (fixed) and sd = logit_q_prior_sigma.
-    if(use_q_prior(i) == 1){ 
+    if(use_q_prior(i) == 1){
       nll_q_prior(i) -= dnorm(q_prior_re(i), logit_q(i), logit_q_prior_sigma(i), 1);
       SIMULATE if(simulate_state(4) == 1) if(sum(simulate_period) > 0){
         q_prior_re(i) = rnorm(logit_q(i), logit_q_prior_sigma(i));
-      } 
+      }
       for(int y = 0; y < n_years_model + n_years_proj; y++) logit_q_mat(y,i) += q_prior_re(i);
     }
     else for(int y = 0; y < n_years_model + n_years_proj; y++) logit_q_mat(y,i) += logit_q(i);
-    
+
     if(use_q_re(i) > 0) // random effects on q, q_re = AR1 deviations on (year,age), dim = n_years x n_M_a
     {
       sigma_q(i) = exp(q_repars(i,0)); // conditional sd
@@ -854,7 +854,7 @@ Type objective_function<Type>::operator() ()
     REPORT(SR_h_tf);
     REPORT(log_SR_R0);
   }
-  
+
   // ---------------------------------------------------------------------------------
   // Population model (get NAA, numbers-at-age, for all years)
   array<Type> NAA_devs(n_years_model+n_years_proj-1, n_ages);
@@ -863,8 +863,8 @@ Type objective_function<Type>::operator() ()
 
   for(int y = 1; y < n_years_model + n_years_proj; y++)
   {
-    
-    pred_NAA.row(y) = get_pred_NAA_y(y, recruit_model, mean_rec_pars, SSB, NAA, log_SR_a, 
+
+    pred_NAA.row(y) = get_pred_NAA_y(y, recruit_model, mean_rec_pars, SSB, NAA, log_SR_a,
       log_SR_b, Ecov_where, Ecov_how, Ecov_lm, ZAA);
     if((y > n_years_model-1) & (proj_R_opt ==2)) {//pred_R in projections == R used for spr-based BRPs. makes long term projections consistent
       vector<Type> Rproj = get_R_FXSPR(pred_NAA, NAA, XSPR_R_opt, XSPR_R_avg_yrs);
@@ -878,7 +878,7 @@ Type objective_function<Type>::operator() ()
       // calculate mean-0 deviations of log NAA (possibly bias-corrected)
       for(int a = 0; a < n_ages; a++) NAA_devs(y-1,a) = log_NAA(y-1,a) - log(pred_NAA(y,a));
     } else { // only recruitment estimated (either fixed or random effects)
-      for(int a = 1; a < n_ages; a++) NAA(y,a) = pred_NAA(y,a); // for ages > 1 survival is deterministic 
+      for(int a = 1; a < n_ages; a++) NAA(y,a) = pred_NAA(y,a); // for ages > 1 survival is deterministic
       if((n_NAA_sigma == 0) && (y > n_years_model-1)){  //recruit FE, but recruit RE in projection years
         NAA(y,0) = exp(logR_proj(y-n_years_model)); // SCAA recruit in projections use diff object (random effect)
         for(int a = 1; a < n_ages; a++) NAA_devs(y-1,a) = log(NAA(y,a)) - log(pred_NAA(y,a));
@@ -888,16 +888,16 @@ Type objective_function<Type>::operator() ()
         for(int a = 0; a < n_ages; a++) NAA_devs(y-1,a) = log(NAA(y,a)) - log(pred_NAA(y,a));
       }
     }
-        
+
     // calculate F and Z in projection years, here bc need NAA(y) if using F from catch
     if(do_proj == 1){ // now need FAA by fleet for projections, use total of average FAA by fleet over avg.yrs
       // get selectivity using average over avg.yrs
       if(y > n_years_model-1){
         waacatch = get_waacatch_y(waa, y, n_ages, waa_pointer_fleets);
         waassb = get_waa_y(waa, y, n_ages, waa_pointer_ssb);
-        //n_fleets x n_ages: projected full F is sum of (means across years at age) across fleets 
-        matrix<Type> FAA_proj = get_F_proj(y, n_fleets, proj_F_opt, FAA, NAA, MAA, mature, waacatch, waassb, fracyr_SSB, 
-          log_SPR0, avg_years_ind, n_years_model, which_F_age, percentSPR, proj_Fcatch, percentFXSPR, F_proj_init(y-n_years_model), 
+        //n_fleets x n_ages: projected full F is sum of (means across years at age) across fleets
+        matrix<Type> FAA_proj = get_F_proj(y, n_fleets, proj_F_opt, FAA, NAA, MAA, mature, waacatch, waassb, fracyr_SSB,
+          log_SPR0, avg_years_ind, n_years_model, which_F_age, percentSPR, proj_Fcatch, percentFXSPR, F_proj_init(y-n_years_model),
           log_SR_a, log_SR_b, recruit_model, percentFMSY, sigma_a_sig_brps);
         FAA_tot.row(y) = FAA_proj.colwise().sum();
         for(int f = 0; f < n_fleets; f++) for(int a = 0; a < n_ages; a++) FAA(y,f,a) = FAA_proj(f,a);
@@ -951,7 +951,7 @@ Type objective_function<Type>::operator() ()
           NAA_devs(y,0) = NAAdevs0(y);
         } else if(bias_correct_pe == 1) { //need to subtract bias-correction off of NAA_devs
           NAA_devs(y,0) -= 0.5*pow(sigma_a_sig(0),2);
-        }      
+        }
       }
     }
   }
@@ -975,14 +975,14 @@ Type objective_function<Type>::operator() ()
             NAA_devs(y,a) = NAAdevs(y,a);
           } else if(bias_correct_pe == 1) { //need to subtract bias-correction off of NAA_devs
             NAA_devs(y,a) -= 0.5*pow(sigma_a_sig(a),2);
-          }      
+          }
         }
       }
     } else{ //decoupling Recruitment random effects from ages 2+, like SAM?
       Type NAA_rho_y_plus = rho_trans(trans_NAA_rho(2)); //allow different rho_y for older ages
 
       array<Type> NAA_devs_plus(NAA_devs.dim(0),NAA_devs.dim(1)-1);
-      vector<Type> sigma_a_sig_plus = sigma_a_sig.segment(1,n_ages-1); 
+      vector<Type> sigma_a_sig_plus = sigma_a_sig.segment(1,n_ages-1);
       for(int a = 1; a < n_ages; a++) NAA_devs_plus.col(a-1) = NAA_devs.col(a);
       if(bias_correct_pe == 1) for(int a = 1; a < n_ages; a++) NAA_devs_plus.col(a-1) += 0.5*pow(sigma_a_sig(a),2);
       nll_NAA += SEPARABLE(VECSCALE(AR1(NAA_rho_a), sigma_a_sig_plus),AR1(NAA_rho_y_plus))(NAA_devs_plus);
@@ -1002,18 +1002,18 @@ Type objective_function<Type>::operator() ()
             NAA_devs(y,a) = NAAdevsplus(y,a-1);
           } else if(bias_correct_pe == 1) { //need to subtract bias-correction off of NAA_devs
             NAA_devs(y,a) -= 0.5*pow(sigma_a_sig(a),2);
-          }      
+          }
         }
       }
     }
   }
   if((n_NAA_sigma > 0) | (do_proj == 1)) SIMULATE if(simulate_state(0) == 1){ // if n_NAA_sigma = 0 (SCAA), recruitment now random effects in projections
-    matrix<Type> sims = sim_pop(NAA_devs, recruit_model, mean_rec_pars, SSB, NAA, log_SR_a, log_SR_b, Ecov_where, Ecov_how, Ecov_lm, 
-      n_NAA_sigma, do_proj, proj_F_opt, FAA, FAA_tot, MAA, mature, waa, waa_pointer_fleets, waa_pointer_ssb, fracyr_SSB, log_SPR0, 
-      avg_years_ind, n_years_model, n_fleets, which_F_age, percentSPR, proj_Fcatch, percentFXSPR, F_proj_init, percentFMSY, proj_R_opt, XSPR_R_opt, 
+    matrix<Type> sims = sim_pop(NAA_devs, recruit_model, mean_rec_pars, SSB, NAA, log_SR_a, log_SR_b, Ecov_where, Ecov_how, Ecov_lm,
+      n_NAA_sigma, do_proj, proj_F_opt, FAA, FAA_tot, MAA, mature, waa, waa_pointer_fleets, waa_pointer_ssb, fracyr_SSB, log_SPR0,
+      avg_years_ind, n_years_model, n_fleets, which_F_age, percentSPR, proj_Fcatch, percentFXSPR, F_proj_init, percentFMSY, proj_R_opt, XSPR_R_opt,
       XSPR_R_avg_yrs, bias_correct_pe, bias_correct_brps, sigma_a_sig);
     SSB = sims.col(sims.cols()-1);
-    for(int a = 0; a < n_ages; a++) 
+    for(int a = 0; a < n_ages; a++)
     {
       NAA.col(a) = sims.col(a);
       pred_NAA.col(a) = sims.col(a+n_ages);
@@ -1044,7 +1044,7 @@ Type objective_function<Type>::operator() ()
   array<Type> catch_paa_proj(n_fleets, n_years_proj, n_ages);
   nll_agg_catch.setZero();
   nll_catch_acomp.setZero();
-  
+
   for(int y = 0; y < n_years_model+n_years_proj; y++)
   {
     //for now just use uncertainty from last year of catch
@@ -1091,7 +1091,7 @@ Type objective_function<Type>::operator() ()
           //keep_Cpaa(i,y,0) is first val, keep_Cpaa(i,y,1) is the length of the vector
           vector<Type> tf_paa_obs = obsvec.segment(keep_Cpaa(f,y,0), keep_Cpaa(f,y,1));
           vector<int> ages_obs_y = agesvec.segment(keep_Cpaa(f,y,0), keep_Cpaa(f,y,1));
-          nll_catch_acomp(y,f) -= get_acomp_ll(tf_paa_obs, t_pred_paa, catch_Neff(y,f), ages_obs_y, age_comp_model_fleets(f), 
+          nll_catch_acomp(y,f) -= get_acomp_ll(tf_paa_obs, t_pred_paa, catch_Neff(y,f), ages_obs_y, age_comp_model_fleets(f),
             vector<Type>(catch_paa_pars.row(f)), keep.segment(keep_Cpaa(f,y,0),keep_Cpaa(f,y,1)), do_osa, paa_obs_y);
         }
         SIMULATE if(simulate_data(0) == 1) if(use_catch_paa(usey,f) == 1){
@@ -1170,7 +1170,7 @@ Type objective_function<Type>::operator() ()
         }
         if((simulate_period(1) == 1) & (y > n_years_model - 1)) agg_indices_proj(y-n_years_model,i) = exp(rnorm(pred_log_indices(y,i), sig));
       }
-      
+
       if(any_index_age_comp(i) == 1)
       {
         vector<Type> paa_obs_y(n_ages);
@@ -1186,7 +1186,7 @@ Type objective_function<Type>::operator() ()
           //keep_Ipaa(i,y,0) is first val, keep_Ipaa(i,y,1) is the length of the vector
           vector<Type> tf_paa_obs = obsvec.segment(keep_Ipaa(i,y,0), keep_Ipaa(i,y,1));
           vector<int> ages_obs_y = agesvec.segment(keep_Ipaa(i,y,0), keep_Ipaa(i,y,1));
-          nll_index_acomp(y,i) -= get_acomp_ll(tf_paa_obs, t_pred_paa, index_Neff(y,i), ages_obs_y, age_comp_model_indices(i), 
+          nll_index_acomp(y,i) -= get_acomp_ll(tf_paa_obs, t_pred_paa, index_Neff(y,i), ages_obs_y, age_comp_model_indices(i),
             vector<Type>(index_paa_pars.row(i)), keep.segment(keep_Ipaa(i,y,0),keep_Ipaa(i,y,1)), do_osa, paa_obs_y);
         }
         SIMULATE if(simulate_data(1) == 1) if(use_index_paa(usey,i) == 1){
@@ -1222,7 +1222,7 @@ Type objective_function<Type>::operator() ()
   REPORT(nll_index_acomp);
   nll += nll_index_acomp.sum();
   //see(nll);
-  
+
   SIMULATE if(sum(simulate_data) > 0) REPORT(obsvec);
   // -------------------------------------------------------------------
   // Calculate catch in projection years
@@ -1292,7 +1292,7 @@ Type objective_function<Type>::operator() ()
   }
 
   //static/avg year results
-  vector<Type> SPR_res_static = get_static_SPR_res(MAA, FAA, which_F_age_static, waa, waa_pointer_ssb, waa_pointer_fleets, mature, percentSPR, R_XSPR, 
+  vector<Type> SPR_res_static = get_static_SPR_res(MAA, FAA, which_F_age_static, waa, waa_pointer_ssb, waa_pointer_fleets, mature, percentSPR, R_XSPR,
     fracyr_SSB, static_FXSPR_init, avg_years_ind, avg_years_ind, avg_years_ind, avg_years_ind, avg_years_ind, XSPR_R_avg_yrs, sigma_a_sig_brps);
   Type log_FXSPR_static = SPR_res_static(0);
   Type log_SSB_FXSPR_static = SPR_res_static(1);
