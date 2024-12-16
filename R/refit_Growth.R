@@ -14,6 +14,7 @@
 
 refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE){
 
+  if(any(is.na(breakpoints))) stop('Cannot handle NA in breakpoints. Did you mean to use +/-Inf?')
   # Apply the function to each row of df2
   split_tables <- purrr::map(1:nrow(breakpoints), function(i) {
     generate_conditions(df1=dat, row = breakpoints[i, ])
