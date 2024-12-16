@@ -226,7 +226,7 @@ The function `refit_Growth()` can be used to generate plots of the growth parame
 Then, run the function with the breakpoints as-is and inspect the outputs.
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
-fits1 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)
+# fits1 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)
 
 names(fits1$split_tables) ## description of the strata used
 ## split_tables contains your observed data broken up by strata
@@ -251,9 +251,9 @@ Based on the exploration above, you may decide to manually combine the second an
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 breakpoints$long <- -Inf 
-fits2 <- refit_Growth(simulated_data, 
-                      breakpoints, 
-                      showPlot = FALSE) ## refit the curves
+# fits2 <- refit_Growth(simulated_data, 
+#                       breakpoints, 
+#                       showPlot = FALSE) ## refit the curves
 ```
 
 We can repeat the visualization and see that 1) the parameter values are now more distinct from one another and 2) so are the curves.
