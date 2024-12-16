@@ -31,7 +31,8 @@ Imports:
     gridExtra,
     here
 LinkingTo:
-    TMB (>= 1.8.1) 
+    TMB, 
+    RcppEigen
 Suggests: 
     knitr,
     rmarkdown
