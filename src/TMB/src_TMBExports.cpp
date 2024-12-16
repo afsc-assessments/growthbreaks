@@ -2,7 +2,6 @@
 
 #define TMB_LIB_INIT R_init_src_TMBExports
 #include <TMB.hpp>
-#include ""
 
 template<class Type>
 Type objective_function<Type>::operator() () {
