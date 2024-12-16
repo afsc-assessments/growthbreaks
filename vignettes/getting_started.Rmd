@@ -214,14 +214,14 @@ The function `refit_Growth()` can be used to generate plots of the growth parame
 *It is common for growth curves to be very similar especially when the number of strata is large (>3), so user judgment is required to discern the best use of the information provided here*.
 
 
-# ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
-# # First, ensure the TMB model is loaded. 
-# 
-# ```
-# 
-# ```{r, echo = FALSE, include = TRUE, warning = FALSE} 
-# # data(fits1);data(fits2)
-# ```
+<!-- # ```{r, echo = TRUE, include = TRUE, warning = FALSE}  -->
+<!-- # # First, ensure the TMB model is loaded.  -->
+<!-- #  -->
+<!-- # ``` -->
+<!-- #  -->
+<!-- # ```{r, echo = FALSE, include = TRUE, warning = FALSE}  -->
+<!-- # # data(fits1);data(fits2) -->
+<!-- # ``` -->
 
 Then, run the function with the breakpoints as-is and inspect the outputs.
 
