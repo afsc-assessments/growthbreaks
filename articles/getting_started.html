@@ -148,18 +148,10 @@ and b) the resultant impact on our perception of length-at-age.</p>
 <p><em>It is common for growth curves to be very similar especially when
 the number of strata is large (&gt;3), so user judgment is required to
 discern the best use of the information provided here</em>.</p>
-<!-- # ```{r, echo = TRUE, include = TRUE, warning = FALSE}  -->
-<!-- # # First, ensure the TMB model is loaded.  -->
-<!-- #  -->
-<!-- # ``` -->
-<!-- #  -->
-<!-- # ```{r, echo = FALSE, include = TRUE, warning = FALSE}  -->
-<!-- # # data(fits1);data(fits2) -->
-<!-- # ``` -->
 <p>Run the function with the breakpoints as-is and inspect the
 outputs.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># fits1 &lt;- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)</span></span>
+<code class="sourceCode R"><span><span class="va">fits1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/refit_Growth.html">refit_Growth</a></span><span class="op">(</span><span class="va">simulated_data</span>, <span class="va">breakpoints</span>, showPlot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fits1</span><span class="op">$</span><span class="va">split_tables</span><span class="op">)</span> <span class="co">## description of the strata used</span></span>
 <span><span class="co">#&gt; [1] "lat_less_66_long_less_-141"    "lat_greater_66_long_less_-141"</span></span>
@@ -199,9 +191,9 @@ south. In this case, we would do away with the breakpoint at
 replacing it with <code>-Inf</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">breakpoints</span><span class="op">$</span><span class="va">long</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="cn">Inf</span> </span>
-<span><span class="co"># fits2 &lt;- refit_Growth(simulated_data, </span></span>
-<span><span class="co">#                       breakpoints, </span></span>
-<span><span class="co">#                       showPlot = FALSE) ## refit the curves</span></span></code></pre></div>
+<span><span class="va">fits2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/refit_Growth.html">refit_Growth</a></span><span class="op">(</span><span class="va">simulated_data</span>,</span>
+<span>                      <span class="va">breakpoints</span>,</span>
+<span>                      showPlot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">## refit the curves</span></span></code></pre></div>
 <p>We can repeat the visualization and see that 1) the key parameter
 values are now more distinct from one another and 2) so are the
 curves.</p>
