@@ -80,7 +80,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
   for (k in 1:3)  fit <- nlminb(model$env$last.par.best, model$fn, model$gr) ## start at last-best call, for stability
   model$report()$denominator ## if we only ran seltype 2 points, this should NOT be 1.0
   best <- model$env$last.par.best
-  rep <- sdreport(model)
+  rep <- TMB::sdreport(model)
 
   ## data frame with observed and predicted values
   fits_df <-  bind_cols(ypred =  rep$value[names(rep$value)=='ypreds'],
@@ -98,7 +98,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
            upper = value + 1.96*value_sd^2)
   pars_df <- rep0 %>%
     filter(!(variable %in% c('L1','L2'))) %>%
-    select(strata, variable, value, value_sd, lower, upper)
+    dplyr::select(strata, variable, value, value_sd, lower, upper)
 
   ## check overlap across strata
   # Initialize the matchcol column with FALSE
@@ -117,9 +117,6 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
       pars_df$matchcol[i] <- TRUE
     }
   }
-
-
-
 
   ## panel plot of par ests and CIs
   p1 <- ggplot(pars_df, aes(x = strata, y = value, color = matchcol)) +
