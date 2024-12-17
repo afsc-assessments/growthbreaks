@@ -66,7 +66,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
 
   # TMB::compile(here::here("TMB","sptlVB_Sel_Sigma.cpp"))
   # dyn.load(TMB::dynlib(here::here("TMB","sptlVB_Sel_Sigma")))
-  model <- TMB::MakeADFun(data, parameters,  DLL="sptlVB_Sel_Sigma",silent=T,map=map)
+  model <- TMB::MakeADFun(data, parameters,  DLL="growthbreaks",silent=T,map=map)
   fit <- nlminb(
     model$par,
     model$fn,
