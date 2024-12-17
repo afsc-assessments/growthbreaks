@@ -4,7 +4,7 @@ This package is designed to implement the GAM-based breakpoint detection method 
 
 # Installation
 
-`remotes::install_github('afsc-assessments/growthbreaks')`
+`remotes::install_github('afsc-assessments/growthbreaks', build_vignettes=TRUE)`
 
 # Vignettes
 Check out the vignettes via `vignette('growthbreaks')` or read the Articles available at 
