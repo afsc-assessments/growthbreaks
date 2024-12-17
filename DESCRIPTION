@@ -10,8 +10,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends:
-    R (>= 3.6.0)
-Imports:
+    R (>= 3.6.0) 
     TMB (>= 1.9.15),
     tidyr (>= 1.1.2),
     dplyr (>= 1.0.2),
