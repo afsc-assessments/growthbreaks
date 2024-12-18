@@ -63,6 +63,8 @@
 
     
     
+<pre><code><span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre>
 <div class="section level2">
 <h2 id="loading-viewing-your-data">Loading &amp; viewing your data<a class="anchor" aria-label="anchor" href="#loading-viewing-your-data"></a>
 </h2>
@@ -73,7 +75,7 @@ north-south cline.</p>
 be aware of any sample size issues. This is accomplished via
 <code><a href="../reference/check_data.html">check_data()</a></code>, which returns plots of the observations and
 residuals.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://afsc-assessments.github.io/growthbreaks/">growthbreaks</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: tidyr</span></span>
 <span><span class="co">#&gt; Loading required package: zoo</span></span>
@@ -155,14 +157,14 @@ observations of small (young) fish, since discrepancies in size may be
 less obvious for fish at or near their asymptotic length. Here I am
 testing three ages and saving the output to a dataframe called
 <code>breakpoints</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">breakpoints</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_Breaks.html">get_Breaks</a></span><span class="op">(</span>dat <span class="op">=</span> <span class="va">simulated_data</span>,</span>
 <span>                          ages_to_use <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">10</span>,<span class="fl">15</span><span class="op">)</span>,</span>
 <span>                          sex <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                          axes <span class="op">=</span> <span class="fl">0</span>, </span>
 <span>                          showPlot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">breakpoints</span></span>
 <span><span class="co">#&gt;         lat      long detected_break     count</span></span>
 <span><span class="co">#&gt; 87 65.63636 -141.4534           TRUE 0.3333333</span></span></code></pre></div>
@@ -192,7 +194,7 @@ the number of strata is large (&gt;3), so user judgment is required to
 discern the best use of the information provided here</em>.</p>
 <p>Run the function with the breakpoints as-is and inspect the
 outputs.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/refit_Growth.html">refit_Growth</a></span><span class="op">(</span><span class="va">simulated_data</span>, <span class="va">breakpoints</span>, showPlot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">fits1</span><span class="op">$</span><span class="va">split_tables</span><span class="op">)</span> <span class="co">## description of the strata used</span></span>
@@ -209,7 +211,7 @@ doesn’t look like the second strata’s
 nor
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 values are very different than the other regions’.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits1</span><span class="op">$</span><span class="va">pars_plot</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>The second way to explore the results are by visualizing the fitted
@@ -219,7 +221,7 @@ curves against the strata-specific observations contained in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mn>66</mn><mo>∘</mo></msup><annotation encoding="application/x-tex">66^{\circ}</annotation></semantics></math>)N
 exhhibit very similar curves, and there are not many data points in the
 second strata to begin with.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits1</span><span class="op">$</span><span class="va">fits_plot</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 </div>
@@ -231,7 +233,7 @@ the second and third strata, using just a single breakpoint north to
 south. In this case, we would do away with the breakpoint at
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><msup><mn>141</mn><mo>∘</mo></msup></mrow><annotation encoding="application/x-tex">-141^{\circ}</annotation></semantics></math>)W,
 replacing it with <code>-Inf</code>.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">breakpoints</span><span class="op">$</span><span class="va">long</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="cn">Inf</span> </span>
 <span><span class="va">fits2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/refit_Growth.html">refit_Growth</a></span><span class="op">(</span><span class="va">simulated_data</span>,</span>
 <span>                      <span class="va">breakpoints</span>,</span>
@@ -239,10 +241,10 @@ replacing it with <code>-Inf</code>.</p>
 <p>We can repeat the visualization and see that 1) the key parameter
 values are now more distinct from one another and 2) so are the
 curves.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits2</span><span class="op">$</span><span class="va">pars_plot</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits2</span><span class="op">$</span><span class="va">fits_plot</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-12-2.png" width="700"></p>
 </div>
