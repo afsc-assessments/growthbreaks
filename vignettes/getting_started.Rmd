@@ -97,28 +97,52 @@ dat <- dat %>% arrange(year, age, length)
 
 dat$long <- runif(nrow(dat),-180, -135)
 
+## first phase of sampling: higher lengths @ higher latitudes
 sample_value <- function(group) {
   weights <- seq(50, 68, length.out = 50)
   sample(seq(50, 68, length.out = 50), 1, prob = weights^(2*group))
 } 
 dat$lat <- sapply(as.numeric(dat$year), sample_value) 
+
+## second phase of sampling: even weight by latitude bin
+# Break the latitude column into 20 equal bins
+simulated_data <- dat %>%
+  mutate(lat_bin = cut(lat, breaks = 20))
+
+# Calculate the weights for each bin
+# bin_counts <- simulated_data %>%
+#   count(lat_bin)
+
+# Calculate the weights (inverse of bin counts)
+# bin_weights <- bin_counts %>%
+#   mutate(weight = 1 / n)
+
+# Merge the weights back into the simulated data
+# simulated_data <- simulated_data %>%
+#   left_join(bin_weights, by = "lat_bin")
+
+# Sample from the data using the calculated weights
+# sampled_data <- simulated_data %>%
+#   sample_n(size = 4500, weight = weight, replace = TRUE) %>%
+#   select(year, lat, long, age, length)
+
 # Plot the data
  
-p1 <- ggplot(dat, aes(x = age, y = length, colour = group)) +
+p1 <- ggplot(simulated_data, aes(x = age, y = length, colour = year)) +
   geom_point(size = 2) + 
   # scale_colour_manual(values=cols) +
   theme_minimal()+
   theme(legend.position = 'none')+
   labs(title = 'length at age observations')
 
-p2 <- ggplot(dat, aes(x = long, y = lat, colour = group, size= length)) +
+p2 <- ggplot(simulated_data, aes(x = long, y = lat, colour = year, size= length)) +
   geom_point(alpha = 0.5) + 
   # scale_colour_manual(values=cols) +
   theme_minimal()+
   labs(title = 'spatial length-at-age') 
 
 # Create a dataframe with latitude and longitude columns
-df <- dat %>%
+df <- simulated_data %>%
       mutate(meanl = mean(length), .by = c('age')) %>%
       mutate(resid = length-meanl) 
 
@@ -137,9 +161,8 @@ simulated_data <- sf_df_clipped %>%
   tidyr::extract(geometry, c('long', 'lat'), '\\((.*), (.*)\\)', convert = TRUE)  %>% 
   select(year, age, length, lat, long)
 
-# usethis::use_data(simulated_data,overwrite = TRUE)
-
-# dat<- simulated_data
+# usethis::use_data(simulated_data,overwrite = TRUE,version = 2 )
+ 
 ```
  
 ```{r, echo = FALSE, include = FALSE}
