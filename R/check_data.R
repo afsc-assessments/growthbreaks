@@ -8,6 +8,7 @@
 
 
 check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
+  if(sex) stop("Cannot currently handle sex structure, set to FALSE")
 
   ## header checks
   colheads <- tolower(names(dat));names(dat) <- colheads

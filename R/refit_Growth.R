@@ -13,7 +13,7 @@
 #' @export
 
 refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showPlot = TRUE){
-
+  if(selex) stop("Cannot currently handle selectivity, input must be FALSE.")
   if(any(is.na(breakpoints))) stop('Cannot handle NA in breakpoints. Did you mean to use +/-Inf?')
   # Apply the function to each row of df2
   split_tables <- purrr::map(1:nrow(breakpoints), function(i) {
