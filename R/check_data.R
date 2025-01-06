@@ -21,6 +21,11 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
       stop("all columns besides sex should be numeric")
     }
   }
+  ## spatial extent check
+  if(min(dat$long) < 180){
+    showPlot <-  FALSE
+    warning("longitude should have a minimum of -180 for plotting to work. disabling plots.")
+  }
 
   ## dimension checks
   if(!sex){
