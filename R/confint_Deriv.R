@@ -1,4 +1,4 @@
-#' Calculate confidence interval of derivative, adapted from \href{https://gist.githubusercontent.com/gavinsimpson/e73f011fdaaab4bb5a30/raw/82118ee30c9ef1254795d2ec6d356a664cc138ab/Deriv.R}{Gavin Simpson}.
+#' Calculate confidence interval of derivative.
 #' @param object vector output of {Deriv()}
 #' @param term string smooth name, i.e. "year". must match values in mod and newdata
 #' @param alpha confidence threshold. default 0.05 (for 95% CI)
