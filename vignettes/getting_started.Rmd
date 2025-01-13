@@ -28,7 +28,7 @@ library(rnaturalearth)
 
 The example shown here will include a simulated spatial process giving rise to heterogeneity in fish length-at-age with a predominant north-south cline.  
 
-```{r, echo = FALSE, warning = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 ## based on code by G.D. Adams
 ## Specify data size
 set.seed(731)
@@ -190,7 +190,7 @@ p2 <- ggplot() +
 
 The first step is to ensure your data are formatted correctly and to be aware of any sample size issues. This is accomplished via `check_data()`, which returns plots of the observations and residuals.
 
-```{r, echo = TRUE, include = TRUE, warning = FALSE}
+```{r, echo = TRUE, include = TRUE, warning = FALSE, message = FALSE}
 library(growthbreaks)
 data(simulated_data) ## from the package
 head(simulated_data)
