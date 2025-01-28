@@ -13,5 +13,4 @@ To install:
 `devtools::install_github('afsc-assessments/growthbreaks')`
 
 # Vignettes
-Check out the vignettes via `vignette('growthbreaks')` or read the Articles available at 
-https://afsc-assessments.github.io/growthbreaks/.
+Check out the example under Articles available at https://afsc-assessments.github.io/growthbreaks/.
