@@ -30,7 +30,7 @@ Depends:
     gridExtra,
     here
 LinkingTo:
-    TMB
+    TMB, RcppEigen
 Suggests: 
     knitr,
     rmarkdown

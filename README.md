@@ -4,6 +4,10 @@ This package is designed to implement the GAM-based breakpoint detection method 
 
 # Installation
 
+You must have `rtools` installed to build this package. To confirm you have the correct version of `rtools` for your version of `R`, run:
+
+`pkgbuild::check_build_tools(debug=TRUE)`
+
 `remotes::install_github('afsc-assessments/growthbreaks', build_vignettes=TRUE)`
 
 # Vignettes
