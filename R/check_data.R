@@ -38,9 +38,9 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
     bothdims <- summarise(dat, n = n(), .by = c('age','year','sex'))
   }
 
-  if(any(agedims$n< 10)) warning(paste0('low sample sizes for ages ',  unique(agedims$age[agedims$n < 10])))
-  if(any(yeardims$n< 10)) warning(paste0('low sample sizes for years ',  unique(yeardims$year[yeardims$n < 10])))
-  if(any(bothdims$n < 5)) warning(paste0('low sample sizes for years ',  unique(bothdims$year[bothdims$n < 10])))
+  if(any(agedims$n< 10)) warning(paste0('low sample sizes for ages ',  unique(agedims$age[agedims$n < 10],'\n')))
+  if(any(yeardims$n< 10)) warning(paste0('low sample sizes for years ',  unique(yeardims$year[yeardims$n < 10],'\n')))
+  if(any(bothdims$n < 5)) warning(paste0('low sample sizes for years ',  unique(bothdims$year[bothdims$n < 10],'\n')))
 
   dat_plot <- dat %>%
     mutate(meanL = mean(length), .by = ifelse(sex, c('sex','age'), 'age')) %>%
