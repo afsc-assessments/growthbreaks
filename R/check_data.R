@@ -14,7 +14,8 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
   colheads <- tolower(names(dat));names(dat) <- colheads
   colneeds <- c("year","age","length",  "long" ,  "lat" )
   if(sex){  colneeds <- c(colneeds,'sex')}
-  if(!all(colneeds %in% colheads)) stop(paste0("missing one of ",colneeds))
+  if(!all(colneeds %in% colheads)) stop(paste0("missing one of ",colneeds,
+                                               "\n"))
   if(!sex & !all( apply(dat[,colneeds],2,is.numeric))) stop("all columns should be numeric")
   if(sex){
     if(!all(apply(dat[,colneeds] %>% select(-"sex"),2,is.numeric))){
