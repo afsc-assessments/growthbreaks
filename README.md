@@ -8,7 +8,9 @@ You must have `rtools` installed to build this package. To confirm you have the 
 
 `pkgbuild::check_build_tools(debug=TRUE)`
 
-`remotes::install_github('afsc-assessments/growthbreaks', build_vignettes=TRUE)`
+To install:
+
+`devtools::install_github('afsc-assessments/growthbreaks')`
 
 # Vignettes
 Check out the vignettes via `vignette('growthbreaks')` or read the Articles available at 
