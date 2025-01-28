@@ -22,10 +22,10 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
     }
   }
   ## spatial extent check
-  if(min(dat$long) < -200){
-    showPlot <-  FALSE
-    warning("longitude should have a minimum of -180 for plotting to work. disabling plots.")
-  }
+  # if(min(dat$long) < -200){
+  #   showPlot <-  FALSE
+  #   warning("longitude should have a minimum of -180 for plotting to work. disabling plots.")
+  # }
 
   ## dimension checks
   if(!sex){
