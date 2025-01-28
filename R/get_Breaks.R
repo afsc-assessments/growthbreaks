@@ -39,7 +39,7 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
   newD <- data.frame( year = seq(min(dat$year),max(dat$year),length = 100),
                       long = seq(min(dat$long),max(dat$long), length = 100),
                       lat = seq(min(dat$lat),max(dat$lat),length = 100))[Terms] %>%
-    mutate(detected_break = NA, count = 0)
+    mutate(detected_break = NA, freq = 0)
 
   for(iage in seq_along(ages_to_use)){ ## loop over key ages
 
@@ -87,7 +87,7 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
       newD$detected_break[newD[,Term] %in% vals] <- TRUE ## flag the rows of detected breaks
       newD$detected_break[newD[,Term] == min(newD[,Term])] <- NA ## overwrite edge cases
       newD$detected_break[newD[,Term] == max(newD[,Term])] <- NA ## overwrite edge cases
-      newD$count[newD[,Term] %in% vals] <- newD$count[newD[,Term] %in% vals]+1 ## add how many combos flagged
+      newD$freq[newD[,Term] %in% vals] <- newD$freq[newD[,Term] %in% vals]+1 ## add how many combos flagged
 
     } ## end terms
     ## TODO end sexes
@@ -95,7 +95,7 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
   } ## end key ages
 
   breakpoints <- newD[!is.na(newD$detected_break),]
-  breakpoints$count <-  breakpoints$count/length(ages_to_use)
+  breakpoints$freq <-  breakpoints$freq/length(ages_to_use)
 
   if(axes!=1){
     data(us)
