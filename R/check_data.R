@@ -30,13 +30,13 @@ check_data <- function(dat, sex = FALSE, showPlot = TRUE) {
 
   ## dimension checks
   if(!sex){
-    agedims <- summarise(dat, n = n(), .by = c('age'))
-    yeardims <- summarise(dat, n = n(), .by = c('year'))
-    bothdims <- summarise(dat, n = n(), .by = c('age','year'))
+    agedims <- dplyr::summarise(dat, n = n(), .by = c('age'))
+    yeardims <- dplyr::summarise(dat, n = n(), .by = c('year'))
+    bothdims <- dplyr::summarise(dat, n = n(), .by = c('age','year'))
   }else{
-    agedims <- summarise(dat, n = n(), .by = c('age','sex'))
-    yeardims <- summarise(dat, n = n(), .by = c('year','sex'))
-    bothdims <- summarise(dat, n = n(), .by = c('age','year','sex'))
+    agedims <- dplyr::summarise(dat, n = n(), .by = c('age','sex'))
+    yeardims <- dplyr::summarise(dat, n = n(), .by = c('year','sex'))
+    bothdims <- dplyr::summarise(dat, n = n(), .by = c('age','year','sex'))
   }
 
   if(any(agedims$n< 10)) warning(paste0('low sample sizes for ages ',  unique(agedims$age[agedims$n < 10],'\n')))
