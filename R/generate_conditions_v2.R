@@ -23,15 +23,15 @@ label_conditions <- function(df1, df2) {
     )
 }
 
-df1_labeled <- label_conditions(df1, df2)
-print(df1_labeled)
-subset(df1_labeled, x_label == 2 & y_label == 1)
-
-df2$des <- c('break detected for age 5', 'break detected for age 10')
-
-ggplot(df1_labeled, aes(x,y, pch =label)) +
-  # scale_color_grey() +
-  geom_point() +
-  # theme(legend.position = 'none') +
-  geom_hline(data = df2, aes(yintercept = y, color = des))+
-  geom_vline(data = df2, aes(xintercept = x, color = des))
+# df1_labeled <- label_conditions(df1, df2)
+# print(df1_labeled)
+# subset(df1_labeled, x_label == 2 & y_label == 1)
+#
+# df2$des <- c('break detected for age 5', 'break detected for age 10')
+#
+# ggplot(df1_labeled, aes(x,y, pch =label)) +
+#   # scale_color_grey() +
+#   geom_point() +
+#   # theme(legend.position = 'none') +
+#   geom_hline(data = df2, aes(yintercept = y, color = des))+
+#   geom_vline(data = df2, aes(xintercept = x, color = des))
