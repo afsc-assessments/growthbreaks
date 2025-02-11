@@ -226,8 +226,9 @@ breakpoints <- get_Breaks(dat = simulated_data,
                           ages_to_use = c(5,10,15),
                           sex = FALSE, 
                           axes = 0, 
-                          showPlot = TRUE)
-breakpoints
+                          showPlot = FALSE)
+breakpoints$breakpoints
+plot_Breaks(dat=simulated_data, breakpoints$breakpoints, showData =  TRUE)
 ```
 As we might have expected based on the raw observations, the algorithm detected a break at about $66^{\circ}$N, as well as an unexpected one at $~141^{\circ}$W. We can see this on the map as well as in the dataframe. The `count` column indicates the proportion of tested ages for which this breakpoint was detected (in this case, 1/3, suggesting that no breakpoints were detected for 2/3 ages). *You may choose to stop here. If you're interested in some of the automated checking and curve fitting functionality, proceed to the next step*.
 
@@ -240,7 +241,7 @@ The function `refit_Growth()` can be used to generate plots of the growth parame
 Run the function with the breakpoints as-is and inspect the outputs.
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
-fits1 <- refit_Growth(simulated_data, breakpoints, showPlot = FALSE)
+fits1 <- refit_Growth(simulated_data, breakpoints$breakpoints, showPlot = FALSE)
 
 names(fits1$split_tables) ## description of the strata used
 ## split_tables contains your observed data broken up by strata
@@ -264,9 +265,9 @@ Based on the exploration above, you may decide to manually combine the second an
 
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
-breakpoints$long <- -Inf 
+breakpoints$breakpoints$long <- -Inf 
 fits2 <- refit_Growth(simulated_data,
-                      breakpoints,
+                      breakpoints$breakpoints,
                       showPlot = FALSE) ## refit the curves
 ```
 
