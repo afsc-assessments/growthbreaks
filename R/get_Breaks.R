@@ -104,7 +104,7 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
     print(p1)
   }
 
-  return(list(breakpoints,p1))
+  return(list('breakpoints'=breakpoints,'plot' = p1))
 
 }
 
