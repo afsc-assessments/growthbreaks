@@ -97,10 +97,11 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
   breakpoints <- newD[!is.na(newD$detected_break),]
   breakpoints$freq <-  breakpoints$freq/length(ages_to_use)
 
-
-  if(showPlot & axes != 1){
+  if(axes !=1){
     p1 <- plot_Breaks(dat,breakpoints,showData = TRUE)
-
+  }
+  if(showPlot & axes != 1){
+    print(p1)
   }
 
   return(list(breakpoints,p1))
