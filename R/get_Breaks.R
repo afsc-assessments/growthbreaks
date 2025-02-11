@@ -97,32 +97,13 @@ get_Breaks <- function(dat, ages_to_use=c(5,10),
   breakpoints <- newD[!is.na(newD$detected_break),]
   breakpoints$freq <-  breakpoints$freq/length(ages_to_use)
 
-  if(axes!=1){
-    data(us)
-    p1 <- ggplot() +
 
-      # geom_hline(data = breakpoints, aes(yintercept = lat, alpha = count), lty = 'dashed')+
-      # geom_vline(data = breakpoints, aes(xintercept = long, alpha = count), lty = 'dashed')+
-      geom_sf(data = us, fill = NA, color = 'black') +
-      geom_point(data = dat, aes(x = long, y= lat, size= length, color = length))+
-      geom_hline(data = breakpoints, aes(yintercept = lat), lty = 'dashed')+
-      geom_vline(data = breakpoints, aes(xintercept = long), lty = 'dashed')+
-      # scale_y_continuous(limits = 2+c(floor(min(dat$lat)),ceiling(max(dat$lat)))) +
-      # scale_x_continuous(limits = 2+c(floor(min(dat$long)),ceiling(max(dat$long)))) +
-      scale_y_continuous(limits = c(50,71)) +
-      scale_x_continuous(limits = c(-185,-130))+
-      guides(size = 'none', alpha = 'none')+
-      theme_minimal() +
-      scale_color_gradient2(low = "blue", mid = "grey90", high = "red", midpoint = mean(dat$length)) +
-      labs(color = '', x= '', y = '', title = 'Length Observations & Detected Break(s)' ) +
-      theme(legend.position = 'top')
-
-  }
   if(showPlot & axes != 1){
-    print(p1)
+    p1 <- plot_Breaks(dat,breakpoints,showData = TRUE)
+
   }
 
-  return(breakpoints)
+  return(list(breakpoints,p1))
 
 }
 
