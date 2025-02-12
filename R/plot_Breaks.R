@@ -11,12 +11,13 @@
 
 plot_Breaks <- function(dat, breakpoints, showData = TRUE){
   data(us)
+
   if(!('year' %in% names(breakpoints))){
     p1 <- ggplot() +
       geom_sf(data = us, fill = NA, color = 'black') +
       {if(showData) geom_point(data = dat, aes(x = long, y= lat, size= length, color = length))} +
-      geom_hline(data = breakpoints, aes(yintercept = lat), lty = 'dashed')+
-      geom_vline(data = breakpoints, aes(xintercept = long), lty = 'dashed')+
+      geom_hline(data = subset(breakpoints, lat != -Inf), aes(yintercept = lat), lty = 'dashed')+
+      geom_vline(data = subset(breakpoints, long != -Inf), aes(xintercept = long), lty = 'dashed')+
       scale_y_continuous(limits = c(50,71)) +
       scale_x_continuous(limits = c(-185,-130))+
       guides(size = 'none', alpha = 'none')+
