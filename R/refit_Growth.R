@@ -64,8 +64,8 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
   # Now estimate everything
   map <- NULL
 
-  # TMB::compile(here::here("TMB","sptlVB_Sel_Sigma.cpp"))
-  # dyn.load(TMB::dynlib(here::here("TMB","sptlVB_Sel_Sigma")))
+  # TMB::compile(here::here("src","growthbreaks.cpp"))
+  # dyn.load(TMB::dynlib(here::here("src","growthbreaks")))
   model <- TMB::MakeADFun(data, parameters,  DLL="growthbreaks",silent=T,map=map)
   fit <- nlminb(
     model$par,
@@ -79,6 +79,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
   )
   for (k in 1:3)  fit <- nlminb(model$env$last.par.best, model$fn, model$gr) ## start at last-best call, for stability
   model$report()$denominator ## if we only ran seltype 2 points, this should NOT be 1.0
+  model$report()$AIC
   best <- model$env$last.par.best
   rep <- TMB::sdreport(model)
 
@@ -146,6 +147,7 @@ refit_Growth <- function(dat = simulated_data, breakpoints, selex = FALSE, showP
   return(list("split_tables" = split_tables,
               "fits_df" = fits_df,
               "pars_df" = pars_df,
+              "AIC" =  model$report()$AIC,
               "pars_plot" = p1,
               "fits_plot" = p2))
 

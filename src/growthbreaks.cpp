@@ -100,8 +100,11 @@ Type objective_function<Type>::operator() ()
 
   } // end rows
 
+  Type AIC = 2*ans+2*nStrata*4; //2* npars(sigma, linf, k, 50) * nstrata
+
   REPORT(ypreds);
   ADREPORT(ypreds);
+  REPORT(AIC);
   REPORT(denominator);
   ADREPORT(t0);
   ADREPORT(k);
