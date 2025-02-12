@@ -167,6 +167,8 @@ doesn’t look like the second strata’s
 nor
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
 values are very different than the other regions’.</p>
+<p>The AIC of this first model is given by <code>fits1$AIC</code>:
+1.4499293^{4}.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits1</span><span class="op">$</span><span class="va">pars_plot</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
@@ -196,7 +198,10 @@ replacing it with <code>-Inf</code>.</p>
 <span>                      showPlot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">## refit the curves</span></span></code></pre></div>
 <p>We can repeat the visualization and see that 1) the key parameter
 values are now more distinct from one another and 2) so are the
-curves.</p>
+curves.The AIC of this updated model is given by <code>fits2$AIC</code>:
+1.4496484^{4}, for a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Δ</mi><annotation encoding="application/x-tex">\Delta</annotation></semantics></math>AIC
+of 2.8091856.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fits2</span><span class="op">$</span><span class="va">pars_plot</span></span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
