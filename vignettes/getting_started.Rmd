@@ -245,9 +245,12 @@ fits1 <- refit_Growth(simulated_data, breakpoints$breakpoints, showPlot = FALSE)
 
 names(fits1$split_tables) ## description of the strata used
 ## split_tables contains your observed data broken up by strata
+
 ```
 
-We can inspect the fitted curves in two ways: first, by visualizing the `$par_plot`. The red points & error bars indicate estimates for which the mean fell outside the confidence interval(s) for other strata. This can be used to infer which components of the growth curve are possibly contributing to detected differences among strata. It doesn't look like the second strata's $L_{\infty}$ nor $k$ values are very different than the other regions'.
+We can inspect the fitted curves in two ways: first, by visualizing the `$par_plot`. The red points & error bars indicate estimates for which the mean fell outside the confidence interval(s) for other strata. This can be used to infer which components of the growth curve are possibly contributing to detected differences among strata. It doesn't look like the second strata's $L_{\infty}$ nor $k$ values are very different than the other regions'. 
+
+The AIC of this first model is given by `fits1$AIC`: `r fits1$AIC`.
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 fits1$pars_plot
@@ -271,7 +274,7 @@ fits2 <- refit_Growth(simulated_data,
                       showPlot = FALSE) ## refit the curves
 ```
 
-We can repeat the visualization and see that 1) the key parameter values are now more distinct from one another and 2) so are the curves.
+We can repeat the visualization and see that 1) the key parameter values are now more distinct from one another and 2) so are the curves.The AIC of this updated model is given by `fits2$AIC`: `r fits2$AIC`, for a $\Delta$AIC of `r fits1$AIC-fits2$AIC`.
 
 ```{r, echo = TRUE, include = TRUE, warning = FALSE} 
 fits2$pars_plot
